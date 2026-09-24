@@ -4,6 +4,10 @@
     <title>Sigma Jello - Games</title>
 
 <style>
+    * {
+        box-sizing: border-box;
+    }
+
     body {
         margin: 0;
         background: #000;
@@ -11,10 +15,6 @@
         font-family: Arial, sans-serif;
         text-align: center;
     }
-
-    /* =========================
-       MOVING BACKGROUND
-    ========================= */
 
     .background {
         position: fixed;
@@ -34,20 +34,12 @@
         pointer-events: none;
     }
 
-    /* =========================
-       PAGE CONTENT
-    ========================= */
-
     h1 {
         margin-top: 30px;
 
         position: relative;
         z-index: 1;
     }
-
-    /* =========================
-       GAME BUTTONS
-    ========================= */
 
     .game-buttons {
         display: flex;
@@ -135,6 +127,10 @@
     }
 
     .eaglercraft-112-button:hover {
+        width: 180px;
+    }
+
+    .eaglercraft-120-button:hover {
         width: 180px;
     }
 
@@ -285,10 +281,6 @@
 
         color: black;
     }
-
-    /* =========================
-       SETTING ROWS
-    ========================= */
 
     .quick-setting {
         background: #f2f2f2;
@@ -588,6 +580,17 @@
     >
         <span class="game-letter">1.12</span>
         <span class="game-name">1.12.2 Eaglercraft</span>
+    </button>
+
+
+    <!-- Eaglercraft 1.20 -->
+
+    <button
+        class="game-button eaglercraft-120-button"
+        onclick="launchEaglercraft('assets/jello/eaglerstuff/1.20.html')"
+    >
+        <span class="game-letter">1.20</span>
+        <span class="game-name">1.20 Eaglercraft</span>
     </button>
 
 
