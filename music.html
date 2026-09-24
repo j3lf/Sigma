@@ -194,10 +194,15 @@
             width: 150px;
         }
 
+        /* =========================
+           LIBRARY
+           ========================= */
+
         .library-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 12px;
             margin: 18px 0 10px;
             color: white;
         }
@@ -207,9 +212,89 @@
             font-weight: bold;
         }
 
+        .library-header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .import-help {
+            color: #bbb;
+            font-size: 11px;
+        }
+
+        .library-header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
         .song-count {
             font-size: 13px;
             color: #ccc;
+        }
+
+        .import-button {
+            border: none;
+            border-radius: 7px;
+            padding: 9px 13px;
+            background: white;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            transition:
+                background 0.15s ease,
+                transform 0.15s ease;
+        }
+
+        .import-button:hover {
+            background: #ddd;
+            transform: translateY(-1px);
+        }
+
+        .imported-badge {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 3px 6px;
+            border-radius: 4px;
+            background: #ddd;
+            color: #555;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+        }
+
+        .song.playing .imported-badge {
+            background: #333;
+            color: #ccc;
+        }
+
+        .remove-imported-button {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: #777;
+            font-size: 17px;
+            cursor: pointer;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .remove-imported-button:hover {
+            background: rgba(0, 0, 0, 0.08);
+            color: #b00000;
+        }
+
+        .song.playing .remove-imported-button {
+            color: #aaa;
+        }
+
+        .song.playing .remove-imported-button:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .search {
@@ -858,6 +943,20 @@
             .song-number {
                 width: 28px;
             }
+
+            .library-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .library-header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .import-button {
+                flex: 1;
+            }
         }
     </style>
 </head>
@@ -988,16 +1087,44 @@
 
         <div class="library-header">
 
-            <span class="library-title">
-                Library
-            </span>
+            <div class="library-header-left">
 
-            <span
-                id="songCount"
-                class="song-count"
-            >
-                0 songs
-            </span>
+                <span class="library-title">
+                    Library
+                </span>
+
+                <span class="import-help">
+                    Import your own MP3 files
+                </span>
+
+            </div>
+
+            <div class="library-header-right">
+
+                <span
+                    id="songCount"
+                    class="song-count"
+                >
+                    0 songs
+                </span>
+
+                <button
+                    id="importButton"
+                    class="import-button"
+                    type="button"
+                >
+                    + Import MP3
+                </button>
+
+                <input
+                    id="mp3FileInput"
+                    type="file"
+                    accept=".mp3,audio/mpeg"
+                    multiple
+                    style="display: none;"
+                >
+
+            </div>
 
         </div>
 
@@ -1047,7 +1174,7 @@
 
     <button
         class="back-button"
-        onclick="location.href='index.html'"
+        onclick="goBackToSigma()"
     >
         <span class="back-letter">←</span>
         <span class="back-text">Back</span>
@@ -1199,10 +1326,32 @@
     <script>
 
         /* =========================
+           SIGMA JELLO 5.0.1 BETA
+           MUSIC PAGE
+           ========================= */
+
+        function getSigmaHomeURL() {
+
+            return new URL(
+                "index.html",
+                document.baseURI
+            ).href;
+
+        }
+
+        function goBackToSigma() {
+
+            window.location.assign(
+                getSigmaHomeURL()
+            );
+
+        }
+
+        /* =========================
            SONG LIBRARY
            ========================= */
 
-        const songs = [
+        let songs = [
 
             "1. Bad Boy OG.mp3",
             "1. Matt Hardy 999 OG.mp3",
@@ -1267,6 +1416,609 @@
             "juice wrld bloody blade unreleased.mp3"
 
         ];
+
+        /* =========================
+           IMPORTED MP3 STORAGE
+           ========================= */
+
+        const importedSongURLs = {};
+
+        const importedSongKeys = new Set();
+
+        const IMPORTED_DB_NAME =
+            "JelloMusicDatabase";
+
+        const IMPORTED_DB_VERSION = 1;
+
+        const IMPORTED_STORE_NAME =
+            "mp3Files";
+
+        let importedDB = null;
+
+        function openImportedDatabase() {
+
+            return new Promise(
+                function(resolve, reject) {
+
+                    if (importedDB) {
+                        resolve(importedDB);
+                        return;
+                    }
+
+                    if (!window.indexedDB) {
+
+                        reject(
+                            new Error(
+                                "IndexedDB is not supported by this browser."
+                            )
+                        );
+
+                        return;
+                    }
+
+                    const request =
+                        indexedDB.open(
+                            IMPORTED_DB_NAME,
+                            IMPORTED_DB_VERSION
+                        );
+
+                    request.onupgradeneeded =
+                        function(event) {
+
+                            const db =
+                                event.target.result;
+
+                            if (
+                                !db.objectStoreNames.contains(
+                                    IMPORTED_STORE_NAME
+                                )
+                            ) {
+
+                                db.createObjectStore(
+                                    IMPORTED_STORE_NAME,
+                                    {
+                                        keyPath: "id"
+                                    }
+                                );
+
+                            }
+
+                        };
+
+                    request.onsuccess =
+                        function(event) {
+
+                            importedDB =
+                                event.target.result;
+
+                            resolve(importedDB);
+
+                        };
+
+                    request.onerror =
+                        function() {
+
+                            reject(
+                                request.error
+                            );
+
+                        };
+
+                }
+            );
+        }
+
+        function saveImportedMP3(
+            id,
+            name,
+            blob
+        ) {
+
+            return openImportedDatabase()
+                .then(
+                    function(db) {
+
+                        return new Promise(
+                            function(resolve, reject) {
+
+                                const transaction =
+                                    db.transaction(
+                                        IMPORTED_STORE_NAME,
+                                        "readwrite"
+                                    );
+
+                                const store =
+                                    transaction.objectStore(
+                                        IMPORTED_STORE_NAME
+                                    );
+
+                                store.put({
+                                    id: id,
+                                    name: name,
+                                    blob: blob
+                                });
+
+                                transaction.oncomplete =
+                                    function() {
+                                        resolve();
+                                    };
+
+                                transaction.onerror =
+                                    function() {
+                                        reject(
+                                            transaction.error
+                                        );
+                                    };
+
+                            }
+                        );
+
+                    }
+                );
+        }
+
+        function loadImportedMP3s() {
+
+            return openImportedDatabase()
+                .then(
+                    function(db) {
+
+                        return new Promise(
+                            function(resolve, reject) {
+
+                                const transaction =
+                                    db.transaction(
+                                        IMPORTED_STORE_NAME,
+                                        "readonly"
+                                    );
+
+                                const store =
+                                    transaction.objectStore(
+                                        IMPORTED_STORE_NAME
+                                    );
+
+                                const request =
+                                    store.getAll();
+
+                                request.onsuccess =
+                                    function() {
+
+                                        resolve(
+                                            request.result || []
+                                        );
+
+                                    };
+
+                                request.onerror =
+                                    function() {
+
+                                        reject(
+                                            request.error
+                                        );
+
+                                    };
+
+                            }
+                        );
+
+                    }
+                );
+        }
+
+        function deleteImportedMP3(id) {
+
+            return openImportedDatabase()
+                .then(
+                    function(db) {
+
+                        return new Promise(
+                            function(resolve, reject) {
+
+                                const transaction =
+                                    db.transaction(
+                                        IMPORTED_STORE_NAME,
+                                        "readwrite"
+                                    );
+
+                                const store =
+                                    transaction.objectStore(
+                                        IMPORTED_STORE_NAME
+                                    );
+
+                                store.delete(id);
+
+                                transaction.oncomplete =
+                                    function() {
+                                        resolve();
+                                    };
+
+                                transaction.onerror =
+                                    function() {
+                                        reject(
+                                            transaction.error
+                                        );
+                                    };
+
+                            }
+                        );
+
+                    }
+                );
+        }
+
+        function createImportedSongID(
+            name
+        ) {
+
+            let id =
+                "imported:" + name;
+
+            let number = 2;
+
+            while (
+                importedSongKeys.has(id) ||
+                songs.includes(name)
+            ) {
+
+                id =
+                    "imported:" +
+                    name +
+                    " (" +
+                    number +
+                    ")";
+
+                number++;
+
+            }
+
+            return id;
+        }
+
+        async function importMP3Files(files) {
+
+            const mp3Files =
+                files.filter(
+                    function(file) {
+
+                        return (
+                            file.type === "audio/mpeg" ||
+                            /\.mp3$/i.test(file.name)
+                        );
+
+                    }
+                );
+
+            if (
+                mp3Files.length === 0
+            ) {
+
+                alert(
+                    "Please select MP3 files."
+                );
+
+                return;
+            }
+
+            let importedCount = 0;
+
+            for (
+                const file of mp3Files
+            ) {
+
+                try {
+
+                    const id =
+                        createImportedSongID(
+                            file.name
+                        );
+
+                    await saveImportedMP3(
+                        id,
+                        file.name,
+                        file
+                    );
+
+                    const objectURL =
+                        URL.createObjectURL(
+                            file
+                        );
+
+                    importedSongURLs[id] =
+                        objectURL;
+
+                    importedSongKeys.add(id);
+
+                    songs.push(id);
+
+                    importedCount++;
+
+                } catch (error) {
+
+                    console.error(
+                        "Could not import:",
+                        file.name,
+                        error
+                    );
+
+                }
+
+            }
+
+            renderPlaylists();
+            renderPlaylistView();
+            renderSongs();
+
+            if (
+                importedCount === 1
+            ) {
+
+                nowPlaying.textContent =
+                    "Imported 1 MP3";
+
+            } else if (
+                importedCount > 1
+            ) {
+
+                nowPlaying.textContent =
+                    "Imported " +
+                    importedCount +
+                    " MP3s";
+
+            }
+
+        }
+
+        async function initializeImportedMP3s() {
+
+            try {
+
+                const records =
+                    await loadImportedMP3s();
+
+                records.forEach(
+                    function(record) {
+
+                        if (
+                            importedSongKeys.has(
+                                record.id
+                            )
+                        ) {
+
+                            return;
+                        }
+
+                        const objectURL =
+                            URL.createObjectURL(
+                                record.blob
+                            );
+
+                        importedSongURLs[
+                            record.id
+                        ] = objectURL;
+
+                        importedSongKeys.add(
+                            record.id
+                        );
+
+                        songs.push(
+                            record.id
+                        );
+
+                    }
+                );
+
+                renderPlaylists();
+                renderPlaylistView();
+                renderSongs();
+
+            } catch (error) {
+
+                console.error(
+                    "Could not load imported MP3s:",
+                    error
+                );
+
+            }
+        }
+
+        async function removeImportedSong(
+            index
+        ) {
+
+            const song =
+                songs[index];
+
+            if (
+                !importedSongKeys.has(song)
+            ) {
+
+                return;
+            }
+
+            const confirmed =
+                confirm(
+                    'Remove "' +
+                    getSongDisplayName(song) +
+                    '" from your imported music?'
+                );
+
+            if (!confirmed) {
+                return;
+            }
+
+            if (
+                currentIndex === index
+            ) {
+
+                audio.pause();
+                audio.removeAttribute("src");
+                audio.load();
+
+                currentIndex = -1;
+
+                nowPlaying.textContent =
+                    "Select a song";
+
+                currentTime.textContent =
+                    "0:00";
+
+                duration.textContent =
+                    "0:00";
+
+                progress.value = 0;
+
+            } else if (
+                currentIndex > index
+            ) {
+
+                currentIndex--;
+
+            }
+
+            const objectURL =
+                importedSongURLs[song];
+
+            if (objectURL) {
+
+                URL.revokeObjectURL(
+                    objectURL
+                );
+
+            }
+
+            delete importedSongURLs[song];
+
+            importedSongKeys.delete(song);
+
+            try {
+
+                await deleteImportedMP3(
+                    song
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Could not delete imported MP3:",
+                    error
+                );
+
+            }
+
+            songs.splice(
+                index,
+                1
+            );
+
+            favorites =
+                favorites.filter(
+                    function(item) {
+                        return item !== song;
+                    }
+                );
+
+            recentSongs =
+                recentSongs.filter(
+                    function(item) {
+                        return item !== song;
+                    }
+                );
+
+            Object.keys(playlists).forEach(
+                function(name) {
+
+                    playlists[name] =
+                        playlists[name].filter(
+                            function(item) {
+                                return item !== song;
+                            }
+                        );
+
+                }
+            );
+
+            saveFavorites();
+            saveRecent();
+            savePlaylists();
+
+            if (playlistPlayback) {
+
+                const playlistSongs =
+                    getPlaylistSongs(
+                        playlistPlayback.name
+                    );
+
+                if (
+                    playlistPlayback.index >=
+                    playlistSongs.length
+                ) {
+
+                    playlistPlayback.index =
+                        Math.max(
+                            0,
+                            playlistSongs.length - 1
+                        );
+
+                }
+
+                if (
+                    playlistSongs.length === 0
+                ) {
+
+                    playlistPlayback = null;
+
+                }
+
+            }
+
+            renderPlaylists();
+            renderPlaylistView();
+            renderSongs();
+
+        }
+
+        function getSongDisplayName(
+            song
+        ) {
+
+            if (
+                importedSongKeys.has(song)
+            ) {
+
+                const parts =
+                    song.split(":");
+
+                if (
+                    parts.length > 1
+                ) {
+
+                    let name =
+                        parts
+                            .slice(1)
+                            .join(":");
+
+                    const match =
+                        name.match(
+                            /^(.*) \((\d+)\)$/
+                        );
+
+                    if (match) {
+                        name = match[1];
+                    }
+
+                    return name.replace(
+                        /\.mp3$/i,
+                        ""
+                    );
+                }
+            }
+
+            return song.replace(
+                /\.mp3$/i,
+                ""
+            );
+
+        }
 
         /* =========================
            ELEMENTS
@@ -1377,24 +2129,25 @@
                 "addSongCancel"
             );
 
+        const importButton =
+            document.getElementById(
+                "importButton"
+            );
+
+        const mp3FileInput =
+            document.getElementById(
+                "mp3FileInput"
+            );
+
         let currentIndex = -1;
-
         let shuffleMode = false;
-
         let repeatMode = 0;
-
         let currentFilter = "all";
-
         let activePlaylist = null;
-
         let playlistPlayback = null;
-
         let playlistModalMode = "create";
-
         let playlistRenameTarget = null;
-
         let addSongTargetPlaylist = null;
-
         let addSongTargetIndex = null;
 
         let favorites = JSON.parse(
@@ -1409,21 +2162,38 @@
             ) || "[]"
         );
 
-        /*
-         * Playlist format:
-         *
-         * {
-         *     "Playlist Name": [
-         *         "Song 1.mp3",
-         *         "Song 2.mp3"
-         *     ]
-         * }
-         */
-
         let playlists = JSON.parse(
             localStorage.getItem(
                 "jelloMusicPlaylists"
             ) || "{}"
+        );
+
+        /* =========================
+           IMPORT BUTTON
+           ========================= */
+
+        importButton.addEventListener(
+            "click",
+            function() {
+
+                mp3FileInput.click();
+
+            }
+        );
+
+        mp3FileInput.addEventListener(
+            "change",
+            function() {
+
+                importMP3Files(
+                    Array.from(
+                        this.files
+                    )
+                );
+
+                this.value = "";
+
+            }
         );
 
         /* =========================
@@ -1543,9 +2313,7 @@
                 function(name) {
 
                     const button =
-                        document.createElement(
-                            "div"
-                        );
+                        document.createElement("div");
 
                     button.className =
                         "playlist-button";
@@ -1561,54 +2329,40 @@
                     }
 
                     const nameSpan =
-                        document.createElement(
-                            "span"
-                        );
+                        document.createElement("span");
 
                     nameSpan.textContent =
                         "♫ " + name;
 
                     const count =
-                        document.createElement(
-                            "span"
-                        );
+                        document.createElement("span");
 
                     count.className =
                         "playlist-song-count";
 
-                    const songCount =
-                        getPlaylistSongs(
-                            name
-                        ).length;
+                    const playlistSongCount =
+                        getPlaylistSongs(name).length;
 
                     count.textContent =
                         "(" +
-                        songCount +
+                        playlistSongCount +
                         ")";
 
                     const actions =
-                        document.createElement(
-                            "span"
-                        );
+                        document.createElement("span");
 
                     actions.className =
                         "playlist-actions";
 
                     const rename =
-                        document.createElement(
-                            "button"
-                        );
+                        document.createElement("button");
 
                     rename.className =
                         "playlist-action";
 
                     rename.type = "button";
-
-                    rename.title =
-                        "Rename playlist";
-
-                    rename.textContent =
-                        "✎";
+                    rename.title = "Rename playlist";
+                    rename.textContent = "✎";
 
                     rename.addEventListener(
                         "click",
@@ -1624,21 +2378,14 @@
                     );
 
                     const deleteButton =
-                        document.createElement(
-                            "button"
-                        );
+                        document.createElement("button");
 
                     deleteButton.className =
                         "playlist-action";
 
-                    deleteButton.type =
-                        "button";
-
-                    deleteButton.title =
-                        "Delete playlist";
-
-                    deleteButton.textContent =
-                        "×";
+                    deleteButton.type = "button";
+                    deleteButton.title = "Delete playlist";
+                    deleteButton.textContent = "×";
 
                     deleteButton.addEventListener(
                         "click",
@@ -1653,32 +2400,18 @@
                         }
                     );
 
-                    actions.appendChild(
-                        rename
-                    );
+                    actions.appendChild(rename);
+                    actions.appendChild(deleteButton);
 
-                    actions.appendChild(
-                        deleteButton
-                    );
-
-                    button.appendChild(
-                        nameSpan
-                    );
-
-                    button.appendChild(
-                        count
-                    );
-
-                    button.appendChild(
-                        actions
-                    );
+                    button.appendChild(nameSpan);
+                    button.appendChild(count);
+                    button.appendChild(actions);
 
                     button.addEventListener(
                         "click",
                         function() {
 
-                            activePlaylist =
-                                name;
+                            activePlaylist = name;
 
                             renderPlaylists();
                             renderPlaylistView();
@@ -1686,9 +2419,7 @@
                         }
                     );
 
-                    playlistList.appendChild(
-                        button
-                    );
+                    playlistList.appendChild(button);
 
                 }
             );
@@ -1710,17 +2441,13 @@
             playlistView.innerHTML = "";
 
             const header =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
             header.className =
                 "playlist-view-header";
 
             const name =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
             name.className =
                 "playlist-view-name";
@@ -1729,17 +2456,13 @@
                 activePlaylist;
 
             const buttons =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
             buttons.className =
                 "playlist-view-buttons";
 
             const play =
-                document.createElement(
-                    "button"
-                );
+                document.createElement("button");
 
             play.className =
                 "playlist-small-button";
@@ -1760,9 +2483,7 @@
             );
 
             const shuffle =
-                document.createElement(
-                    "button"
-                );
+                document.createElement("button");
 
             shuffle.className =
                 "playlist-small-button";
@@ -1783,9 +2504,7 @@
             );
 
             const close =
-                document.createElement(
-                    "button"
-                );
+                document.createElement("button");
 
             close.className =
                 "playlist-small-button";
@@ -1800,11 +2519,8 @@
                 "click",
                 function() {
 
-                    activePlaylist =
-                        null;
-
-                    playlistPlayback =
-                        null;
+                    activePlaylist = null;
+                    playlistPlayback = null;
 
                     renderPlaylists();
                     renderPlaylistView();
@@ -1819,9 +2535,7 @@
             header.appendChild(name);
             header.appendChild(buttons);
 
-            playlistView.appendChild(
-                header
-            );
+            playlistView.appendChild(header);
 
             const playlistSongs =
                 getPlaylistSongs(
@@ -1833,9 +2547,7 @@
             ) {
 
                 const empty =
-                    document.createElement(
-                        "div"
-                    );
+                    document.createElement("div");
 
                 empty.className =
                     "empty-playlist";
@@ -1843,9 +2555,7 @@
                 empty.textContent =
                     "This playlist is empty. Use the + button next to a song to add one.";
 
-                playlistView.appendChild(
-                    empty
-                );
+                playlistView.appendChild(empty);
 
                 return;
             }
@@ -1854,56 +2564,36 @@
                 function(song, index) {
 
                     const row =
-                        document.createElement(
-                            "div"
-                        );
+                        document.createElement("div");
 
                     row.className =
                         "playlist-song";
 
                     const number =
-                        document.createElement(
-                            "div"
-                        );
+                        document.createElement("div");
 
-                    number.style.width =
-                        "28px";
-
-                    number.style.color =
-                        "#888";
-
-                    number.textContent =
-                        index + 1;
+                    number.style.width = "28px";
+                    number.style.color = "#888";
+                    number.textContent = index + 1;
 
                     const songName =
-                        document.createElement(
-                            "div"
-                        );
+                        document.createElement("div");
 
                     songName.className =
                         "playlist-song-name";
 
                     songName.textContent =
-                        song.replace(
-                            /\.mp3$/i,
-                            ""
-                        );
+                        getSongDisplayName(song);
 
                     const remove =
-                        document.createElement(
-                            "button"
-                        );
+                        document.createElement("button");
 
                     remove.className =
                         "playlist-song-remove";
 
                     remove.type = "button";
-
-                    remove.title =
-                        "Remove from playlist";
-
-                    remove.textContent =
-                        "×";
+                    remove.title = "Remove from playlist";
+                    remove.textContent = "×";
 
                     remove.addEventListener(
                         "click",
@@ -1964,9 +2654,7 @@
                         }
                     );
 
-                    playlistView.appendChild(
-                        row
-                    );
+                    playlistView.appendChild(row);
 
                 }
             );
@@ -1978,11 +2666,8 @@
 
         function openCreatePlaylist() {
 
-            playlistModalMode =
-                "create";
-
-            playlistRenameTarget =
-                null;
+            playlistModalMode = "create";
+            playlistRenameTarget = null;
 
             playlistNameModalTitle.textContent =
                 "Create Playlist";
@@ -1990,8 +2675,7 @@
             playlistNameConfirm.textContent =
                 "Create";
 
-            playlistNameInput.value =
-                "";
+            playlistNameInput.value = "";
 
             playlistNameModal.classList.add(
                 "show"
@@ -2007,11 +2691,8 @@
 
         function openRenamePlaylist(name) {
 
-            playlistModalMode =
-                "rename";
-
-            playlistRenameTarget =
-                name;
+            playlistModalMode = "rename";
+            playlistRenameTarget = name;
 
             playlistNameModalTitle.textContent =
                 "Rename Playlist";
@@ -2019,8 +2700,7 @@
             playlistNameConfirm.textContent =
                 "Rename";
 
-            playlistNameInput.value =
-                name;
+            playlistNameInput.value = name;
 
             playlistNameModal.classList.add(
                 "show"
@@ -2041,8 +2721,7 @@
                 "show"
             );
 
-            playlistNameInput.value =
-                "";
+            playlistNameInput.value = "";
 
         }
 
@@ -2055,11 +2734,12 @@
                 return;
             }
 
-            if (playlistModalMode === "create") {
+            if (
+                playlistModalMode ===
+                "create"
+            ) {
 
-                if (
-                    playlists[name]
-                ) {
+                if (playlists[name]) {
 
                     alert(
                         "A playlist with that name already exists."
@@ -2072,8 +2752,7 @@
 
                 savePlaylists();
 
-                activePlaylist =
-                    name;
+                activePlaylist = name;
 
                 renderPlaylists();
                 renderPlaylistView();
@@ -2089,8 +2768,7 @@
             ) {
 
                 if (
-                    name !==
-                    playlistRenameTarget &&
+                    name !== playlistRenameTarget &&
                     playlists[name]
                 ) {
 
@@ -2115,8 +2793,7 @@
                     playlistRenameTarget
                 ) {
 
-                    activePlaylist =
-                        name;
+                    activePlaylist = name;
 
                 }
 
@@ -2149,11 +2826,8 @@
                 activePlaylist === name
             ) {
 
-                activePlaylist =
-                    null;
-
-                playlistPlayback =
-                    null;
+                activePlaylist = null;
+                playlistPlayback = null;
 
             }
 
@@ -2183,9 +2857,7 @@
             "keydown",
             function(event) {
 
-                if (
-                    event.key === "Enter"
-                ) {
+                if (event.key === "Enter") {
 
                     event.preventDefault();
 
@@ -2193,9 +2865,7 @@
 
                 }
 
-                if (
-                    event.key === "Escape"
-                ) {
+                if (event.key === "Escape") {
 
                     closePlaylistNameModal();
 
@@ -2234,14 +2904,11 @@
                 openCreatePlaylist();
 
                 return;
-
             }
 
-            addSongTargetIndex =
-                index;
+            addSongTargetIndex = index;
 
-            addSongModalList.innerHTML =
-                "";
+            addSongModalList.innerHTML = "";
 
             Object.keys(playlists).forEach(
                 function(name) {
@@ -2282,25 +2949,23 @@
                                 ];
 
                             if (
-                                playlists[name]
-                                    .includes(song)
+                                playlists[name].includes(
+                                    song
+                                )
                             ) {
 
                                 playlists[name] =
-                                    playlists[name]
-                                        .filter(
-                                            function(item) {
-                                                return (
-                                                    item !==
-                                                    song
-                                                );
-                                            }
-                                        );
+                                    playlists[name].filter(
+                                        function(item) {
+                                            return item !== song;
+                                        }
+                                    );
 
                             } else {
 
-                                playlists[name]
-                                    .push(song);
+                                playlists[name].push(
+                                    song
+                                );
 
                             }
 
@@ -2326,7 +2991,6 @@
             addSongModal.classList.add(
                 "show"
             );
-
         }
 
         function closeAddSongModal() {
@@ -2335,8 +2999,7 @@
                 "show"
             );
 
-            addSongTargetIndex =
-                null;
+            addSongTargetIndex = null;
 
         }
 
@@ -2380,15 +3043,12 @@
             ) {
 
                 return;
-
             }
 
-            activePlaylist =
-                playlistName;
+            activePlaylist = playlistName;
 
             playlistPlayback = {
-                name:
-                    playlistName,
+                name: playlistName,
                 index:
                     shuffle
                         ? Math.floor(
@@ -2396,8 +3056,7 @@
                             playlistSongs.length
                         )
                         : 0,
-                shuffle:
-                    shuffle
+                shuffle: shuffle
             };
 
             const song =
@@ -2439,11 +3098,9 @@
                 playlistSongs.length === 0
             ) {
 
-                playlistPlayback =
-                    null;
+                playlistPlayback = null;
 
                 return false;
-
             }
 
             let nextIndex;
@@ -2453,8 +3110,7 @@
             ) {
 
                 if (
-                    playlistSongs.length ===
-                    1
+                    playlistSongs.length === 1
                 ) {
 
                     nextIndex = 0;
@@ -2494,24 +3150,19 @@
 
                     } else {
 
-                        playlistPlayback =
-                            null;
+                        playlistPlayback = null;
 
                         return false;
 
                     }
-
                 }
-
             }
 
             playlistPlayback.index =
                 nextIndex;
 
             const song =
-                playlistSongs[
-                    nextIndex
-                ];
+                playlistSongs[nextIndex];
 
             const actualIndex =
                 songs.indexOf(song);
@@ -2521,7 +3172,6 @@
             ) {
 
                 return false;
-
             }
 
             loadSong(
@@ -2558,14 +3208,9 @@
                 indexes =
                     indexes.filter(
                         function(index) {
-
-                            return isFavorite(
-                                index
-                            );
-
+                            return isFavorite(index);
                         }
                     );
-
             }
 
             if (
@@ -2577,23 +3222,14 @@
                     recentSongs
                         .map(
                             function(song) {
-
-                                return songs.indexOf(
-                                    song
-                                );
-
+                                return songs.indexOf(song);
                             }
                         )
                         .filter(
                             function(index) {
-
-                                return (
-                                    index !== -1
-                                );
-
+                                return index !== -1;
                             }
                         );
-
             }
 
             if (query) {
@@ -2602,15 +3238,14 @@
                     indexes.filter(
                         function(index) {
 
-                            return songs[index]
+                            return getSongDisplayName(
+                                songs[index]
+                            )
                                 .toLowerCase()
-                                .includes(
-                                    query
-                                );
+                                .includes(query);
 
                         }
                     );
-
             }
 
             return indexes;
@@ -2622,8 +3257,7 @@
 
         function renderSongs() {
 
-            songList.innerHTML =
-                "";
+            songList.innerHTML = "";
 
             const indexes =
                 getFilteredIndexes();
@@ -2649,9 +3283,7 @@
             ) {
 
                 const empty =
-                    document.createElement(
-                        "div"
-                    );
+                    document.createElement("div");
 
                 empty.className =
                     "empty-library";
@@ -2679,9 +3311,7 @@
 
                 }
 
-                songList.appendChild(
-                    empty
-                );
+                songList.appendChild(empty);
 
                 return;
             }
@@ -2693,16 +3323,12 @@
                         songs[index];
 
                     const item =
-                        document.createElement(
-                            "div"
-                        );
+                        document.createElement("div");
 
-                    item.className =
-                        "song";
+                    item.className = "song";
 
                     if (
-                        index ===
-                        currentIndex
+                        index === currentIndex
                     ) {
 
                         item.classList.add(
@@ -2712,9 +3338,7 @@
                     }
 
                     const number =
-                        document.createElement(
-                            "div"
-                        );
+                        document.createElement("div");
 
                     number.className =
                         "song-number";
@@ -2723,43 +3347,86 @@
                         index + 1;
 
                     const name =
-                        document.createElement(
-                            "div"
-                        );
+                        document.createElement("div");
 
                     name.className =
                         "song-name";
 
                     name.textContent =
-                        song.replace(
-                            /\.mp3$/i,
-                            ""
+                        getSongDisplayName(song);
+
+                    if (
+                        importedSongKeys.has(song)
+                    ) {
+
+                        const badge =
+                            document.createElement("span");
+
+                        badge.className =
+                            "imported-badge";
+
+                        badge.textContent =
+                            "IMPORTED";
+
+                        name.appendChild(
+                            badge
                         );
 
+                    }
+
                     const actions =
-                        document.createElement(
-                            "div"
-                        );
+                        document.createElement("div");
 
                     actions.className =
                         "song-actions";
 
-                    const addPlaylist =
-                        document.createElement(
-                            "button"
+                    if (
+                        importedSongKeys.has(song)
+                    ) {
+
+                        const removeImported =
+                            document.createElement("button");
+
+                        removeImported.className =
+                            "remove-imported-button";
+
+                        removeImported.type =
+                            "button";
+
+                        removeImported.title =
+                            "Remove imported MP3";
+
+                        removeImported.textContent =
+                            "×";
+
+                        removeImported.addEventListener(
+                            "click",
+                            function(event) {
+
+                                event.stopPropagation();
+
+                                removeImportedSong(
+                                    index
+                                );
+
+                            }
                         );
+
+                        actions.appendChild(
+                            removeImported
+                        );
+
+                    }
+
+                    const addPlaylist =
+                        document.createElement("button");
 
                     addPlaylist.className =
                         "add-playlist-button";
 
-                    addPlaylist.type =
-                        "button";
-
-                    addPlaylist.title =
-                        "Add to playlist";
-
-                    addPlaylist.textContent =
-                        "+";
+                    addPlaylist.type = "button";
+                    addPlaylist.title = "Add to playlist";
+                    addPlaylist.textContent = "+";
 
                     addPlaylist.addEventListener(
                         "click",
@@ -2767,23 +3434,18 @@
 
                             event.stopPropagation();
 
-                            openAddSongModal(
-                                index
-                            );
+                            openAddSongModal(index);
 
                         }
                     );
 
                     const favorite =
-                        document.createElement(
-                            "button"
-                        );
+                        document.createElement("button");
 
                     favorite.className =
                         "favorite-button";
 
-                    favorite.type =
-                        "button";
+                    favorite.type = "button";
 
                     favorite.title =
                         isFavorite(index)
@@ -2823,12 +3485,7 @@
                                 favorites =
                                     favorites.filter(
                                         function(item) {
-
-                                            return (
-                                                item !==
-                                                songName
-                                            );
-
+                                            return item !== songName;
                                         }
                                     );
 
@@ -2847,32 +3504,18 @@
                         }
                     );
 
-                    actions.appendChild(
-                        addPlaylist
-                    );
+                    actions.appendChild(addPlaylist);
+                    actions.appendChild(favorite);
 
-                    actions.appendChild(
-                        favorite
-                    );
-
-                    item.appendChild(
-                        number
-                    );
-
-                    item.appendChild(
-                        name
-                    );
-
-                    item.appendChild(
-                        actions
-                    );
+                    item.appendChild(number);
+                    item.appendChild(name);
+                    item.appendChild(actions);
 
                     item.addEventListener(
                         "click",
                         function() {
 
-                            playlistPlayback =
-                                null;
+                            playlistPlayback = null;
 
                             loadSong(
                                 index,
@@ -2882,9 +3525,7 @@
                         }
                     );
 
-                    songList.appendChild(
-                        item
-                    );
+                    songList.appendChild(item);
 
                 }
             );
@@ -2903,28 +3544,31 @@
                 return;
             }
 
-            currentIndex =
-                index;
+            currentIndex = index;
 
             const song =
-                songs[
-                    currentIndex
-                ];
+                songs[currentIndex];
 
-            audio.src =
-                "music/" +
-                encodeURIComponent(
-                    song
-                );
+            if (
+                importedSongKeys.has(song) &&
+                importedSongURLs[song]
+            ) {
+
+                audio.src =
+                    importedSongURLs[song];
+
+            } else {
+
+                audio.src =
+                    "music/" +
+                    encodeURIComponent(song);
+
+            }
 
             nowPlaying.textContent =
-                song.replace(
-                    /\.mp3$/i,
-                    ""
-                );
+                getSongDisplayName(song);
 
-            progress.value =
-                0;
+            progress.value = 0;
 
             currentTime.textContent =
                 "0:00";
@@ -2970,24 +3614,17 @@
                 if (played) {
                     return;
                 }
-
             }
 
-            if (
-                songs.length === 0
-            ) {
-
+            if (songs.length === 0) {
                 return;
-
             }
 
             let nextIndex;
 
             if (shuffleMode) {
 
-                if (
-                    songs.length === 1
-                ) {
+                if (songs.length === 1) {
 
                     nextIndex = 0;
 
@@ -3005,7 +3642,6 @@
                         nextIndex ===
                         currentIndex
                     );
-
                 }
 
             } else {
@@ -3014,15 +3650,12 @@
                     currentIndex + 1;
 
                 if (
-                    nextIndex >=
-                    songs.length ||
+                    nextIndex >= songs.length ||
                     currentIndex === -1
                 ) {
 
                     nextIndex = 0;
-
                 }
-
             }
 
             loadSong(
@@ -3033,9 +3666,7 @@
 
         function playPreviousSong() {
 
-            if (
-                playlistPlayback
-            ) {
+            if (playlistPlayback) {
 
                 const playlistSongs =
                     getPlaylistSongs(
@@ -3050,25 +3681,18 @@
                         audio.currentTime > 3
                     ) {
 
-                        audio.currentTime =
-                            0;
+                        audio.currentTime = 0;
 
                         return;
-
                     }
 
                     let previousIndex =
-                        playlistPlayback.index -
-                        1;
+                        playlistPlayback.index - 1;
 
-                    if (
-                        previousIndex < 0
-                    ) {
+                    if (previousIndex < 0) {
 
                         previousIndex =
-                            playlistSongs.length -
-                            1;
-
+                            playlistSongs.length - 1;
                     }
 
                     playlistPlayback.index =
@@ -3080,9 +3704,7 @@
                         ];
 
                     const actualIndex =
-                        songs.indexOf(
-                            song
-                        );
+                        songs.indexOf(song);
 
                     if (
                         actualIndex !== -1
@@ -3092,44 +3714,32 @@
                             actualIndex,
                             true
                         );
-
                     }
 
                     return;
-
                 }
-
             }
 
-            if (
-                songs.length === 0
-            ) {
-
+            if (songs.length === 0) {
                 return;
-
             }
 
             if (
                 audio.currentTime > 3
             ) {
 
-                audio.currentTime =
-                    0;
+                audio.currentTime = 0;
 
                 return;
-
             }
 
             let previousIndex =
                 currentIndex - 1;
 
-            if (
-                previousIndex < 0
-            ) {
+            if (previousIndex < 0) {
 
                 previousIndex =
                     songs.length - 1;
-
             }
 
             loadSong(
@@ -3146,9 +3756,7 @@
             "click",
             function() {
 
-                if (
-                    currentIndex === -1
-                ) {
+                if (currentIndex === -1) {
 
                     loadSong(
                         0,
@@ -3156,12 +3764,9 @@
                     );
 
                     return;
-
                 }
 
-                if (
-                    audio.paused
-                ) {
+                if (audio.paused) {
 
                     audio.play().catch(
                         function() {}
@@ -3172,7 +3777,6 @@
                     audio.pause();
 
                 }
-
             }
         );
 
@@ -3206,7 +3810,6 @@
                     "jelloMusicShuffle",
                     shuffleMode
                 );
-
             }
         );
 
@@ -3220,12 +3823,8 @@
 
                 repeatMode++;
 
-                if (
-                    repeatMode > 2
-                ) {
-
+                if (repeatMode > 2) {
                     repeatMode = 0;
-
                 }
 
                 updateRepeatButton();
@@ -3234,7 +3833,6 @@
                     "jelloMusicRepeat",
                     repeatMode
                 );
-
             }
         );
 
@@ -3245,9 +3843,7 @@
                 "repeat-one"
             );
 
-            if (
-                repeatMode === 1
-            ) {
+            if (repeatMode === 1) {
 
                 repeatButton.classList.add(
                     "active"
@@ -3256,9 +3852,7 @@
                 repeatButton.title =
                     "Repeat All";
 
-            } else if (
-                repeatMode === 2
-            ) {
+            } else if (repeatMode === 2) {
 
                 repeatButton.classList.add(
                     "active",
@@ -3272,7 +3866,6 @@
 
                 repeatButton.title =
                     "Repeat Off";
-
             }
         }
 
@@ -3304,22 +3897,16 @@
             "ended",
             function() {
 
-                if (
-                    repeatMode === 2
-                ) {
+                if (repeatMode === 2) {
 
-                    audio.currentTime =
-                        0;
+                    audio.currentTime = 0;
 
                     audio.play();
 
                     return;
-
                 }
 
-                if (
-                    playlistPlayback
-                ) {
+                if (playlistPlayback) {
 
                     const played =
                         playNextPlaylistSong();
@@ -3327,7 +3914,6 @@
                     if (played) {
                         return;
                     }
-
                 }
 
                 if (
@@ -3337,14 +3923,12 @@
                         songs.length - 1
                 ) {
 
-                    audio.currentTime =
-                        0;
+                    audio.currentTime = 0;
 
                     playButton.textContent =
                         "▶";
 
                     return;
-
                 }
 
                 playNextSong();
@@ -3368,12 +3952,8 @@
             "timeupdate",
             function() {
 
-                if (
-                    !audio.duration
-                ) {
-
+                if (!audio.duration) {
                     return;
-
                 }
 
                 progress.value =
@@ -3407,14 +3987,11 @@
             "play",
             function() {
 
-                if (
-                    currentIndex !== -1
-                ) {
+                if (currentIndex !== -1) {
 
                     addRecent(
                         currentIndex
                     );
-
                 }
 
                 renderSongs();
@@ -3430,19 +4007,13 @@
             "input",
             function() {
 
-                if (
-                    !audio.duration
-                ) {
-
+                if (!audio.duration) {
                     return;
-
                 }
 
                 audio.currentTime =
                     (
-                        Number(
-                            progress.value
-                        ) / 100
+                        Number(progress.value) / 100
                     ) * audio.duration;
 
             }
@@ -3488,11 +4059,9 @@
             "click",
             function() {
 
-                currentFilter =
-                    "all";
+                currentFilter = "all";
 
                 updateFilterButtons();
-
                 renderSongs();
 
             }
@@ -3502,11 +4071,9 @@
             "click",
             function() {
 
-                currentFilter =
-                    "favorites";
+                currentFilter = "favorites";
 
                 updateFilterButtons();
-
                 renderSongs();
 
             }
@@ -3516,11 +4083,9 @@
             "click",
             function() {
 
-                currentFilter =
-                    "recent";
+                currentFilter = "recent";
 
                 updateFilterButtons();
-
                 renderSongs();
 
             }
@@ -3535,8 +4100,7 @@
 
             favoriteFilter.classList.toggle(
                 "active",
-                currentFilter ===
-                    "favorites"
+                currentFilter === "favorites"
             );
 
             recentFilter.classList.toggle(
@@ -3555,19 +4119,14 @@
             function(event) {
 
                 if (
-                    event.target.tagName ===
-                        "INPUT" ||
-                    event.target.tagName ===
-                        "BUTTON"
+                    event.target.tagName === "INPUT" ||
+                    event.target.tagName === "BUTTON"
                 ) {
 
                     return;
-
                 }
 
-                if (
-                    event.code === "Space"
-                ) {
+                if (event.code === "Space") {
 
                     event.preventDefault();
 
@@ -3576,46 +4135,32 @@
                 }
 
                 if (
-                    event.code ===
-                    "ArrowRight"
+                    event.code === "ArrowRight"
                 ) {
 
-                    if (
-                        audio.duration
-                    ) {
+                    if (audio.duration) {
 
                         audio.currentTime =
                             Math.min(
                                 audio.currentTime + 5,
                                 audio.duration
                             );
-
                     }
-
                 }
 
                 if (
-                    event.code ===
-                    "ArrowLeft"
+                    event.code === "ArrowLeft"
                 ) {
 
-                    if (
-                        audio.duration
-                    ) {
+                    if (audio.duration) {
 
                         audio.currentTime =
                             Math.max(
                                 audio.currentTime - 5,
                                 0
                             );
-
                     }
-
                 }
-
-                /*
-                 * P intentionally does nothing.
-                 */
 
             }
         );
@@ -3629,9 +4174,7 @@
                 "jelloMusicVolume"
             );
 
-        if (
-            savedVolume !== null
-        ) {
+        if (savedVolume !== null) {
 
             volume.value =
                 savedVolume;
@@ -3650,9 +4193,7 @@
                 "jelloMusicShuffle"
             );
 
-        if (
-            savedShuffle === "true"
-        ) {
+        if (savedShuffle === "true") {
 
             shuffleMode = true;
 
@@ -3667,9 +4208,7 @@
                 "jelloMusicRepeat"
             );
 
-        if (
-            savedRepeat !== null
-        ) {
+        if (savedRepeat !== null) {
 
             repeatMode =
                 Number(savedRepeat);
@@ -3714,8 +4253,7 @@
 
                     event.preventDefault();
 
-                    event.returnValue =
-                        "";
+                    event.returnValue = "";
 
                     return "";
 
@@ -3725,8 +4263,7 @@
 
         function disableNoTabClose() {
 
-            window.onbeforeunload =
-                null;
+            window.onbeforeunload = null;
 
         }
 
@@ -3747,9 +4284,7 @@
             "change",
             function() {
 
-                if (
-                    this.checked
-                ) {
+                if (this.checked) {
 
                     localStorage.setItem(
                         "noTabClose",
@@ -3780,9 +4315,7 @@
             "change",
             function() {
 
-                if (
-                    this.checked
-                ) {
+                if (this.checked) {
 
                     if (
                         document.documentElement
@@ -3803,9 +4336,7 @@
                         document.exitFullscreen();
 
                     }
-
                 }
-
             }
         );
 
@@ -3835,12 +4366,8 @@
             "mousemove",
             function(event) {
 
-                if (
-                    !mouseBackgroundEnabled
-                ) {
-
+                if (!mouseBackgroundEnabled) {
                     return;
-
                 }
 
                 const x =
@@ -3855,11 +4382,8 @@
                         window.innerHeight
                     ) - 0.5;
 
-                const moveX =
-                    x * 35;
-
-                const moveY =
-                    y * 35;
+                const moveX = x * 35;
+                const moveY = y * 35;
 
                 background.style.transform =
                     `translate(${moveX}px, ${moveY}px)`;
@@ -3879,12 +4403,40 @@
                     mouseBackgroundEnabled
                 );
 
-                if (
-                    !mouseBackgroundEnabled
-                ) {
+                if (!mouseBackgroundEnabled) {
 
                     background.style.transform =
                         "translate(0px, 0px)";
+
+                }
+
+            }
+        );
+
+        /* =========================
+           OPEN SETTINGS WITH P
+           ========================= */
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.target.tagName === "INPUT" ||
+                    event.target.tagName === "TEXTAREA" ||
+                    event.target.tagName === "BUTTON"
+                ) {
+
+                    return;
+                }
+
+                if (
+                    event.key.toLowerCase() === "p"
+                ) {
+
+                    quickSettings.classList.toggle(
+                        "show"
+                    );
 
                 }
 
@@ -3922,6 +4474,8 @@
         renderPlaylistView();
 
         renderSongs();
+
+        initializeImportedMP3s();
 
     </script>
 

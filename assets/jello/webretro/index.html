@@ -109,7 +109,9 @@
                                 );
                                 return false;
                             ">
+
                             System Specifics
+
                         </a>
 
                     </li>
@@ -1242,39 +1244,34 @@
 
 
     /*
-        WEBRETRO MENU
+        =========================
+        WEBRETRO MENU FIX
+        =========================
 
-        Keep the original WebRetro menu,
-        but make sure it starts closed.
+        DO NOT CHANGE THIS.
+        This keeps the original WebRetro
+        top bar working after a ROM starts.
     */
 
     #menubar {
 
-        z-index: 1000 !important;
+        z-index: 1000000 !important;
+
+        pointer-events: auto !important;
 
     }
 
 
-    /*
-        Prevent a closed menu from blocking
-        the emulator underneath it.
-    */
+    #menu {
 
-    #menuhider:not(:checked) ~ #menu {
-
-        pointer-events: none;
+        pointer-events: auto !important;
 
     }
 
 
-    /*
-        Allow the original WebRetro menu
-        to work normally when opened.
-    */
+    #menuhider {
 
-    #menuhider:checked ~ #menu {
-
-        pointer-events: auto;
+        pointer-events: auto !important;
 
     }
 
@@ -1283,92 +1280,113 @@
         =========================
         BACK BUTTON
         =========================
+
+        This is intentionally ABOVE the
+        emulator canvas and canvas mask.
+
+        It does NOT change the WebRetro
+        menu z-index.
     */
 
     #sigmaBackButton {
 
-        position: fixed;
+        position: fixed !important;
 
-        left: 20px;
-        bottom: 20px;
+        left: 20px !important;
+        bottom: 20px !important;
 
-        width: 65px;
-        height: 65px;
+        width: 65px !important;
+        height: 65px !important;
 
-        padding: 0;
-        margin: 0;
+        padding: 0 !important;
+        margin: 0 !important;
 
-        border: none;
+        border: none !important;
+        outline: none !important;
 
-        border-radius: 50%;
+        border-radius: 50% !important;
 
-        background: white;
-        color: black;
+        background: white !important;
+        color: black !important;
 
-        font-family: Arial, sans-serif;
+        font-family: Arial, sans-serif !important;
 
-        font-size: 28px;
-        font-weight: bold;
+        font-size: 28px !important;
+        font-weight: bold !important;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
 
-        cursor: pointer;
+        cursor: pointer !important;
 
-        overflow: hidden;
-        white-space: nowrap;
+        overflow: hidden !important;
+        white-space: nowrap !important;
 
-        z-index: 999999 !important;
+        z-index: 2147483646 !important;
+
+        pointer-events: auto !important;
+
+        user-select: none !important;
+        -webkit-user-select: none !important;
+
+        touch-action: manipulation !important;
 
         transition:
             width 0.25s ease,
             transform 0.2s ease,
             background 0.2s ease,
-            border-radius 0.25s ease;
+            border-radius 0.25s ease !important;
 
     }
 
 
     #sigmaBackButton:hover {
 
-        width: 115px;
+        width: 115px !important;
 
-        background: #ddd;
+        background: #ddd !important;
 
-        transform: scale(1.08);
+        transform: scale(1.08) !important;
 
-        border-radius: 35px;
+        border-radius: 35px !important;
+
+    }
+
+
+    #sigmaBackButton:active {
+
+        transform: scale(0.96) !important;
 
     }
 
 
     #sigmaBackButton .back-arrow {
 
-        display: block;
+        display: block !important;
 
     }
 
 
     #sigmaBackButton .back-text {
 
-        display: none;
+        display: none !important;
 
-        font-size: 18px;
+        font-size: 18px !important;
 
     }
 
 
     #sigmaBackButton:hover .back-arrow {
 
-        display: none;
+        display: none !important;
 
     }
 
 
     #sigmaBackButton:hover .back-text {
 
-        display: block;
+        display: block !important;
 
     }
 
@@ -1555,7 +1573,7 @@
 
         return new URL(
             "../../../index.html",
-            window.location.href
+            document.baseURI
         ).href;
 
     }
@@ -1563,8 +1581,9 @@
 
     function goBackToSigma() {
 
-        window.location.href =
-            getSigmaHomeURL();
+        window.location.assign(
+            getSigmaHomeURL()
+        );
 
     }
 
@@ -1598,7 +1617,7 @@
         const musicURL =
             new URL(
                 "../../../music.html",
-                window.location.href
+                document.baseURI
             ).href;
 
 
@@ -1672,10 +1691,56 @@
         WEBRETRO MENU FIX
         =========================
 
-        WebRetro uses #menuhider as the
-        checkbox controlling the menu.
+        WebRetro normally lets the emulator
+        take keyboard focus after a ROM loads.
 
-        Make sure it starts CLOSED.
+        That is fine.
+
+        We only make sure the taskbar itself
+        can always receive mouse input.
+    */
+
+    function fixWebRetroMenu() {
+
+        const menubar =
+            document.getElementById("menubar");
+
+        const menu =
+            document.getElementById("menu");
+
+        const menuHider =
+            document.getElementById("menuhider");
+
+
+        if (!menubar || !menu) {
+
+            return;
+
+        }
+
+
+        menubar.style.zIndex =
+            "1000000";
+
+        menubar.style.pointerEvents =
+            "auto";
+
+        menu.style.pointerEvents =
+            "auto";
+
+
+        if (menuHider) {
+
+            menuHider.style.pointerEvents =
+                "auto";
+
+        }
+
+    }
+
+
+    /*
+        Close menu.
     */
 
     function closeWebRetroMenu() {
@@ -1686,7 +1751,8 @@
 
         if (menuHider) {
 
-            menuHider.checked = false;
+            menuHider.checked =
+                false;
 
         }
 
@@ -1694,22 +1760,24 @@
 
 
     /*
-        Close the menu immediately.
+        Initial setup.
     */
+
+    fixWebRetroMenu();
 
     closeWebRetroMenu();
 
 
     /*
-        WebRetro can initialize parts of
-        the interface after the HTML loads.
-
-        Close the menu again after loading.
+        WebRetro finishes initializing
+        after the page loads.
     */
 
     window.addEventListener(
         "load",
         function() {
+
+            fixWebRetroMenu();
 
             closeWebRetroMenu();
 
@@ -1718,14 +1786,14 @@
 
 
     /*
-        Additional safety delays for
-        ?core=opera and other core URLs.
+        ROM loading can modify the UI,
+        so reinforce the menu after startup.
     */
 
     setTimeout(
         function() {
 
-            closeWebRetroMenu();
+            fixWebRetroMenu();
 
         },
         500
@@ -1735,11 +1803,54 @@
     setTimeout(
         function() {
 
-            closeWebRetroMenu();
+            fixWebRetroMenu();
 
         },
         1500
     );
+
+
+    setTimeout(
+        function() {
+
+            fixWebRetroMenu();
+
+        },
+        3000
+    );
+
+
+    /*
+        If WebRetro replaces/rebuilds part of
+        the interface, automatically restore
+        the taskbar settings.
+    */
+
+    const webRetroMenuObserver =
+        new MutationObserver(
+            function() {
+
+                fixWebRetroMenu();
+
+            }
+        );
+
+
+    const mainArea =
+        document.getElementById("mainarea");
+
+
+    if (mainArea) {
+
+        webRetroMenuObserver.observe(
+            mainArea,
+            {
+                childList: true,
+                subtree: true
+            }
+        );
+
+    }
 
 </script>
 
