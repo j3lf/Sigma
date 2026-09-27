@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Settings - Sigma Jello</title>
+    <link id="jelloFavicon" rel="icon" href="assets/icons/sigma.jpg">
 
     <style>
         body {
@@ -213,6 +214,110 @@
             display: block;
         }
 
+        /* Tab Name / Icon Settings */
+
+        .tab-settings {
+            background: white;
+            color: black;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 18px 20px;
+            margin: 10px auto;
+            width: 300px;
+            text-align: left;
+            transition:
+                background 0.15s ease,
+                transform 0.15s ease;
+        }
+
+        .tab-settings:hover {
+            background: #e7e7e7;
+            transform: translateX(3px);
+        }
+
+        .tab-settings-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .tab-setting-label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin: 12px 0 6px 0;
+        }
+
+        .tab-setting-input,
+        .tab-setting-select {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 10px 11px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: white;
+            color: black;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .tab-setting-input:focus,
+        .tab-setting-select:focus {
+            border-color: #111;
+        }
+
+        .tab-setting-hint {
+            color: #777;
+            font-size: 11px;
+            line-height: 1.4;
+            margin-top: 5px;
+        }
+
+        .tab-setting-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .tab-setting-button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition:
+                background 0.15s ease,
+                transform 0.15s ease;
+        }
+
+        .tab-setting-button:hover {
+            background: #333;
+            transform: translateY(-1px);
+        }
+
+        .tab-setting-button.reset {
+            background: #eee;
+            color: black;
+        }
+
+        .tab-setting-button.reset:hover {
+            background: #ddd;
+        }
+
+        .tab-setting-status {
+            display: none;
+            margin-top: 10px;
+            color: #555;
+            font-size: 12px;
+            text-align: center;
+        }
+
         /* Quick Settings */
 
         .quick-settings {
@@ -382,6 +487,112 @@
         </div>
 
 
+        <!-- Tab Name / Icon -->
+
+        <div class="tab-settings">
+
+            <div class="tab-settings-title">
+                Tab Name & Icon
+            </div>
+
+            <label
+                class="tab-setting-label"
+                for="tabNameInput"
+            >
+                Tab Name
+            </label>
+
+            <input
+                type="text"
+                id="tabNameInput"
+                class="tab-setting-input"
+                placeholder="Sigma Jello"
+                maxlength="80"
+            >
+
+            <div class="tab-setting-hint">
+                This changes the text shown on the browser tab.
+            </div>
+
+            <label
+                class="tab-setting-label"
+                for="tabIconInput"
+            >
+                Tab Icon
+            </label>
+
+            <select
+                id="tabIconInput"
+                class="tab-setting-select"
+            >
+                <option value="assets/icons/sigma.jpg">
+                    Sigma
+                </option>
+
+                <option value="assets/icons/doc.jpg">
+                    Doc
+                </option>
+
+                <option value="assets/icons/drive.jpg">
+                    Drive
+                </option>
+
+                <option value="custom">
+                    Custom Path
+                </option>
+            </select>
+
+            <div class="tab-setting-hint">
+                Choose which picture from assets/icons/ is used as the tab icon.
+            </div>
+
+            <label
+                class="tab-setting-label"
+                for="customTabIconInput"
+            >
+                Custom Icon Path
+            </label>
+
+            <input
+                type="text"
+                id="customTabIconInput"
+                class="tab-setting-input"
+                placeholder="assets/icons/myicon.png"
+            >
+
+            <div class="tab-setting-hint">
+                Or enter another image path if you add more icons later.
+            </div>
+
+            <div class="tab-setting-buttons">
+
+                <button
+                    id="saveTabSettings"
+                    class="tab-setting-button"
+                    type="button"
+                >
+                    Save
+                </button>
+
+                <button
+                    id="resetTabSettings"
+                    class="tab-setting-button reset"
+                    type="button"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+            <div
+                id="tabSettingStatus"
+                class="tab-setting-status">
+                Saved!
+            </div>
+
+        </div>
+
+
         <!-- Sign Out -->
 
         <button
@@ -523,6 +734,220 @@
 
         const quickMouseBackground =
             document.getElementById("quickMouseBackground");
+
+        const tabNameInput =
+            document.getElementById("tabNameInput");
+
+        const tabIconInput =
+            document.getElementById("tabIconInput");
+
+        const customTabIconInput =
+            document.getElementById("customTabIconInput");
+
+        const saveTabSettings =
+            document.getElementById("saveTabSettings");
+
+        const resetTabSettings =
+            document.getElementById("resetTabSettings");
+
+        const tabSettingStatus =
+            document.getElementById("tabSettingStatus");
+
+
+        /* =========================
+           TAB NAME / ICON
+           ========================= */
+
+        const DEFAULT_TAB_NAME = "Sigma Jello";
+        const DEFAULT_TAB_ICON = "assets/icons/sigma.jpg";
+
+        function setTabIcon(iconPath) {
+
+            let favicon =
+                document.getElementById("jelloFavicon");
+
+            if (!favicon) {
+
+                favicon =
+                    document.createElement("link");
+
+                favicon.id = "jelloFavicon";
+                favicon.rel = "icon";
+
+                document.head.appendChild(favicon);
+
+            }
+
+            favicon.href =
+                iconPath || DEFAULT_TAB_ICON;
+
+        }
+
+
+        function applyTabSettings() {
+
+            const savedName =
+                localStorage.getItem("jelloTabName")
+                || DEFAULT_TAB_NAME;
+
+            const savedIcon =
+                localStorage.getItem("jelloTabIcon")
+                || DEFAULT_TAB_ICON;
+
+            document.title = savedName;
+            setTabIcon(savedIcon);
+
+            tabNameInput.value = savedName;
+
+            const presetOptions =
+                Array.from(tabIconInput.options);
+
+            const matchingPreset =
+                presetOptions.find(
+                    option => option.value === savedIcon
+                );
+
+            if (matchingPreset) {
+
+                tabIconInput.value =
+                    savedIcon;
+
+                customTabIconInput.value = "";
+
+            } else {
+
+                tabIconInput.value = "custom";
+                customTabIconInput.value =
+                    savedIcon;
+
+            }
+
+        }
+
+
+        function saveTabSettingsNow() {
+
+            let tabName =
+                tabNameInput.value.trim();
+
+            if (!tabName) {
+                tabName = DEFAULT_TAB_NAME;
+            }
+
+            let tabIcon =
+                customTabIconInput.value.trim();
+
+            if (!tabIcon) {
+                tabIcon = tabIconInput.value;
+            }
+
+            if (!tabIcon || tabIcon === "custom") {
+                tabIcon = DEFAULT_TAB_ICON;
+            }
+
+            localStorage.setItem(
+                "jelloTabName",
+                tabName
+            );
+
+            localStorage.setItem(
+                "jelloTabIcon",
+                tabIcon
+            );
+
+            localStorage.setItem(
+                "jelloTabIconVersion",
+                Date.now().toString()
+            );
+
+            document.title = tabName;
+
+            setTabIcon(tabIcon);
+
+            tabSettingStatus.textContent =
+                "Saved! This will carry over to other Sigma Jello pages.";
+
+            tabSettingStatus.style.display =
+                "block";
+
+            setTimeout(function() {
+
+                tabSettingStatus.style.display =
+                    "none";
+
+            }, 2500);
+
+        }
+
+
+        saveTabSettings.addEventListener(
+            "click",
+            saveTabSettingsNow
+        );
+
+
+        resetTabSettings.addEventListener(
+            "click",
+            function() {
+
+                localStorage.removeItem(
+                    "jelloTabName"
+                );
+
+                localStorage.removeItem(
+                    "jelloTabIcon"
+                );
+
+                localStorage.removeItem(
+                    "jelloTabIconVersion"
+                );
+
+                tabNameInput.value =
+                    DEFAULT_TAB_NAME;
+
+                tabIconInput.value =
+                    DEFAULT_TAB_ICON;
+
+                customTabIconInput.value =
+                    "";
+
+                document.title =
+                    DEFAULT_TAB_NAME;
+
+                setTabIcon(
+                    DEFAULT_TAB_ICON
+                );
+
+                tabSettingStatus.textContent =
+                    "Reset!";
+
+                tabSettingStatus.style.display =
+                    "block";
+
+                setTimeout(function() {
+
+                    tabSettingStatus.style.display =
+                        "none";
+
+                }, 2000);
+
+            }
+        );
+
+
+        tabIconInput.addEventListener(
+            "change",
+            function() {
+
+                if (this.value !== "custom") {
+                    customTabIconInput.value = "";
+                }
+
+            }
+        );
+
+
+        applyTabSettings();
 
 
         /* =========================
