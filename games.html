@@ -2,86 +2,45 @@
 
 <html>
 <head>
-    <title>Sigma Jello - Games</title>
-<script>
-    /* =========================
-       SAVED TAB NAME + ICON
-    ========================= */
-
-    function applyTabSettings() {
-
-        const savedTabName =
-            localStorage.getItem("tabName");
-
-        const savedTabIcon =
-            localStorage.getItem("tabIcon");
-
-        document.title =
-            savedTabName ||
-            "Sigma Jello - Games";
 
 
-        let favicon =
-            document.querySelector(
-                'link[rel="icon"]'
-            );
+    
+<title>Sigma Jello - Games</title>
 
-        if (!favicon) {
-
-            favicon =
-                document.createElement("link");
-
-            favicon.rel = "icon";
-
-            document.head.appendChild(
-                favicon
-            );
-
-        }
-
-        favicon.href =
-            savedTabIcon ||
-            "assets/icons/sigma.jpg";
-
-    }
-
-
-    applyTabSettings();
-
-
-    window.addEventListener(
-        "storage",
-        function(event) {
-
-            if (
-                event.key === "tabName" ||
-                event.key === "tabIcon"
-            ) {
-
-                applyTabSettings();
-
-            }
-
-        }
-    );
-</script>
-```
+<link
+    id="siteFavicon"
+    rel="icon"
+    href="assets/icons/sigma.jpg"
+>
 
 <style>
+
     * {
         box-sizing: border-box;
     }
 
+
     body {
         margin: 0;
+
         background: #000;
+
         color: white;
+
         font-family: Arial, sans-serif;
+
         text-align: center;
     }
 
+
+    /* =========================
+       BACKGROUND
+    ========================= */
+
     .background {
+
         position: fixed;
+
         inset: -40px;
 
         background:
@@ -90,7 +49,8 @@
 
         z-index: 0;
 
-        transform: translate(0px, 0px);
+        transform:
+            translate(0px, 0px);
 
         transition:
             transform 0.15s ease-out;
@@ -98,49 +58,75 @@
         pointer-events: none;
     }
 
+
     h1 {
+
         margin-top: 30px;
 
         position: relative;
+
         z-index: 1;
     }
 
+
+    /* =========================
+       GAME BUTTONS
+    ========================= */
+
     .game-buttons {
+
         display: flex;
+
         justify-content: center;
+
         align-items: center;
+
         gap: 18px;
+
         margin-top: 35px;
 
         position: relative;
+
         z-index: 1;
 
         flex-wrap: wrap;
     }
 
+
     .game-button {
+
         width: 85px;
+
         height: 85px;
 
         padding: 0;
+
         margin: 5px;
 
         border-radius: 50%;
+
         border: none;
 
         background: white;
+
         color: black;
 
         font-size: 30px;
+
         font-weight: bold;
+
         font-family: Arial, sans-serif;
 
         display: flex;
+
         align-items: center;
+
         justify-content: center;
 
         cursor: pointer;
+
         overflow: hidden;
+
         white-space: nowrap;
 
         transition:
@@ -150,29 +136,44 @@
             border-radius 0.25s ease;
     }
 
+
     .game-button:hover {
+
         background: #ddd;
+
         transform: scale(1.08);
+
         border-radius: 45px;
     }
 
+
     .game-button .game-letter {
+
         display: block;
     }
 
+
     .game-button .game-name {
+
         display: none;
+
         font-size: 18px;
+
         font-weight: bold;
     }
 
+
     .game-button:hover .game-letter {
+
         display: none;
     }
 
+
     .game-button:hover .game-name {
+
         display: block;
     }
+
 
     /* =========================
        BUTTON WIDTHS
@@ -182,82 +183,106 @@
         width: 180px;
     }
 
+
     .eaglercraft-18-button:hover {
         width: 180px;
     }
+
 
     .eaglercraft-19-button:hover {
         width: 180px;
     }
 
+
     .eaglercraft-112-button:hover {
         width: 180px;
     }
+
 
     .eaglercraft-112-test-button:hover {
         width: 190px;
     }
 
+
     .eaglermod-button:hover {
         width: 180px;
     }
+
 
     .aeroclient-button:hover {
         width: 170px;
     }
 
+
     .resent-button:hover {
         width: 140px;
     }
+
 
     .btd5-button:hover {
         width: 160px;
     }
 
+
     .terraria-button:hover {
         width: 130px;
     }
+
 
     .nzp-button:hover {
         width: 180px;
     }
 
+
     .webretro-button:hover {
         width: 180px;
     }
+
 
     /* =========================
        BACK BUTTON
     ========================= */
 
     .back-button {
+
         position: fixed;
 
         bottom: 20px;
+
         left: 20px;
 
         width: 65px;
+
         height: 65px;
 
         padding: 0;
+
         margin: 0;
 
         border-radius: 50%;
+
         border: none;
 
         background: white;
+
         color: black;
 
         font-size: 28px;
+
         font-weight: bold;
+
         font-family: Arial, sans-serif;
 
         display: flex;
+
         align-items: center;
+
         justify-content: center;
 
         cursor: pointer;
+
         overflow: hidden;
+
         white-space: nowrap;
 
         transition:
@@ -269,7 +294,9 @@
         z-index: 10;
     }
 
+
     .back-button:hover {
+
         width: 115px;
 
         background: #ddd;
@@ -279,80 +306,113 @@
         border-radius: 35px;
     }
 
+
     .back-button .back-letter {
+
         display: block;
     }
 
+
     .back-button .back-text {
+
         display: none;
+
         font-size: 18px;
     }
 
+
     .back-button:hover .back-letter {
+
         display: none;
     }
 
+
     .back-button:hover .back-text {
+
         display: block;
     }
+
 
     /* =========================
        QUICK SETTINGS
     ========================= */
 
     .quick-settings {
+
         display: none;
 
         position: fixed;
+
         inset: 0;
 
-        background: rgba(0, 0, 0, 0.45);
+        background:
+            rgba(0, 0, 0, 0.45);
 
         justify-content: center;
+
         align-items: center;
 
         z-index: 9999;
     }
 
+
     .quick-settings.show {
+
         display: flex;
     }
 
+
     .quick-settings-box {
+
         width: 360px;
 
         background: white;
+
         color: black;
 
         border-radius: 6px;
+
         padding: 25px;
 
         box-shadow:
-            0 15px 50px rgba(0, 0, 0, 0.65);
+            0 15px 50px
+            rgba(0, 0, 0, 0.65);
 
-        animation: clickguiOpen 0.2s ease-out;
+        animation:
+            clickguiOpen 0.2s ease-out;
     }
 
+
     .quick-settings-box h2 {
-        margin: 0 0 22px 0;
+
+        margin:
+            0 0 22px 0;
 
         font-size: 25px;
+
         font-weight: bold;
 
         color: black;
     }
 
+
     .quick-setting {
+
         background: #f2f2f2;
 
-        border: 1px solid #ddd;
+        border:
+            1px solid #ddd;
+
         border-radius: 5px;
 
         padding: 15px;
+
         margin-bottom: 10px;
 
         display: flex;
+
         justify-content: space-between;
+
         align-items: center;
 
         color: black;
@@ -362,32 +422,46 @@
             transform 0.15s ease;
     }
 
+
     .quick-setting:hover {
+
         background: #e7e7e7;
-        transform: translateX(3px);
+
+        transform:
+            translateX(3px);
     }
 
+
     .quick-setting span {
+
         font-size: 16px;
+
         font-weight: bold;
     }
 
+
     /* =========================
-       JELLO MUSIC BUTTON
+       MUSIC BUTTON
     ========================= */
 
     .music-open-button {
+
         width: 100%;
+
         padding: 12px;
 
         border: none;
+
         border-radius: 5px;
 
         background: #111;
+
         color: white;
 
         font-size: 16px;
+
         font-weight: bold;
+
         font-family: Arial, sans-serif;
 
         cursor: pointer;
@@ -397,31 +471,44 @@
             transform 0.15s ease;
     }
 
+
     .music-open-button:hover {
+
         background: #333;
-        transform: translateX(3px);
+
+        transform:
+            translateX(3px);
     }
 
+
     /* =========================
-       TOGGLE SWITCH
+       SWITCH
     ========================= */
 
     .switch {
+
         position: relative;
 
         width: 48px;
+
         height: 25px;
     }
 
+
     .switch input {
+
         opacity: 0;
 
         width: 0;
+
         height: 0;
     }
 
+
     .slider {
+
         position: absolute;
+
         inset: 0;
 
         background: #cfcfcf;
@@ -433,15 +520,19 @@
         transition: 0.2s;
     }
 
+
     .slider:before {
+
         content: "";
 
         position: absolute;
 
         width: 19px;
+
         height: 19px;
 
         left: 3px;
+
         bottom: 3px;
 
         background: white;
@@ -449,25 +540,34 @@
         border-radius: 50%;
 
         box-shadow:
-            0 1px 4px rgba(0, 0, 0, 0.25);
+            0 1px 4px
+            rgba(0, 0, 0, 0.25);
 
         transition: 0.2s;
     }
 
+
     input:checked + .slider {
+
         background: #111;
     }
 
+
     input:checked + .slider:before {
-        transform: translateX(23px);
+
+        transform:
+            translateX(23px);
     }
+
 
     /* =========================
        HINT
     ========================= */
 
     .hint {
-        margin: 18px 0 0 0;
+
+        margin:
+            18px 0 0 0;
 
         color: #777;
 
@@ -476,33 +576,45 @@
         text-align: center;
     }
 
+
     /* =========================
        MUSIC POPUP
     ========================= */
 
     .music-popup {
+
         display: none;
 
         position: fixed;
+
         inset: 0;
 
-        background: rgba(0, 0, 0, 0.55);
+        background:
+            rgba(0, 0, 0, 0.55);
 
         justify-content: center;
+
         align-items: center;
 
         z-index: 10000;
     }
 
+
     .music-popup.show {
+
         display: flex;
     }
 
+
     .music-popup-box {
+
         position: relative;
 
-        width: min(900px, 90vw);
-        height: min(650px, 85vh);
+        width:
+            min(900px, 90vw);
+
+        height:
+            min(650px, 85vh);
 
         background: white;
 
@@ -511,27 +623,36 @@
         overflow: hidden;
 
         box-shadow:
-            0 20px 70px rgba(0, 0, 0, 0.8);
+            0 20px 70px
+            rgba(0, 0, 0, 0.8);
 
-        animation: clickguiOpen 0.2s ease-out;
+        animation:
+            clickguiOpen 0.2s ease-out;
     }
 
+
     .music-popup-close {
+
         position: absolute;
 
         top: 10px;
+
         right: 10px;
 
         width: 38px;
+
         height: 38px;
 
         border: none;
+
         border-radius: 50%;
 
         background: white;
+
         color: black;
 
         font-size: 25px;
+
         font-weight: bold;
 
         cursor: pointer;
@@ -539,20 +660,28 @@
         z-index: 2;
 
         box-shadow:
-            0 2px 10px rgba(0, 0, 0, 0.25);
+            0 2px 10px
+            rgba(0, 0, 0, 0.25);
 
         transition:
             background 0.15s ease,
             transform 0.15s ease;
     }
 
+
     .music-popup-close:hover {
+
         background: #ddd;
-        transform: scale(1.08);
+
+        transform:
+            scale(1.08);
     }
 
+
     .music-popup iframe {
+
         width: 100%;
+
         height: 100%;
 
         border: none;
@@ -560,22 +689,28 @@
         display: block;
     }
 
+
     /* =========================
-       OPEN ANIMATION
+       ANIMATION
     ========================= */
 
     @keyframes clickguiOpen {
 
         from {
+
             opacity: 0;
-            transform: scale(0.92);
+
+            transform:
+                scale(0.92);
         }
 
         to {
-            opacity: 1;
-            transform: scale(1);
-        }
 
+            opacity: 1;
+
+            transform:
+                scale(1);
+        }
     }
 
 </style>
@@ -584,28 +719,39 @@
 
 <body>
 
-<!-- Moving Background -->
+<!-- =========================
+     BACKGROUND
+========================= -->
 
 <div
     id="background"
-    class="background"
-></div>
+    class="background">
+</div>
 
 <h1>Games</h1>
 
-<!-- Game Buttons -->
+<!-- =========================
+     GAME BUTTONS
+========================= -->
 
 <div class="game-buttons">
-
-```
 <!-- Eaglercraft 1.5.2 -->
 
 <button
     class="game-button eaglercraft-15-button"
-    onclick="launchEaglercraft('assets/jello/1.5.2.html')"
+    onclick="launchEaglercraft(
+        'assets/jello/1.5.2.html'
+    )"
 >
-    <span class="game-letter">1.5</span>
-    <span class="game-name">1.5 Eaglercraft</span>
+
+    <span class="game-letter">
+        1.5
+    </span>
+
+    <span class="game-name">
+        1.5 Eaglercraft
+    </span>
+
 </button>
 
 
@@ -613,10 +759,19 @@
 
 <button
     class="game-button eaglercraft-18-button"
-    onclick="launchEaglercraft('assets/jello/1.8.html')"
+    onclick="launchEaglercraft(
+        'assets/jello/1.8.html'
+    )"
 >
-    <span class="game-letter">1.8</span>
-    <span class="game-name">1.8 Eaglercraft</span>
+
+    <span class="game-letter">
+        1.8
+    </span>
+
+    <span class="game-name">
+        1.8 Eaglercraft
+    </span>
+
 </button>
 
 
@@ -624,10 +779,19 @@
 
 <button
     class="game-button eaglercraft-19-button"
-    onclick="launchEaglercraft('assets/jello/1.9.html')"
+    onclick="launchEaglercraft(
+        'assets/jello/1.9.html'
+    )"
 >
-    <span class="game-letter">1.9</span>
-    <span class="game-name">1.9 Eaglercraft</span>
+
+    <span class="game-letter">
+        1.9
+    </span>
+
+    <span class="game-name">
+        1.9 Eaglercraft
+    </span>
+
 </button>
 
 
@@ -635,10 +799,19 @@
 
 <button
     class="game-button eaglercraft-112-button"
-    onclick="launchEaglercraft('assets/jello/1.12.2.html')"
+    onclick="launchEaglercraft(
+        'assets/jello/1.12.2.html'
+    )"
 >
-    <span class="game-letter">1.12</span>
-    <span class="game-name">1.12.2 Eaglercraft</span>
+
+    <span class="game-letter">
+        1.12
+    </span>
+
+    <span class="game-name">
+        1.12.2 Eaglercraft
+    </span>
+
 </button>
 
 
@@ -646,10 +819,19 @@
 
 <button
     class="game-button eaglercraft-112-test-button"
-    onclick="launchEaglercraft('assets/jello/1.12.2js.html')"
+    onclick="launchEaglercraft(
+        'assets/jello/1.12.2js.html'
+    )"
 >
-    <span class="game-letter">1.12T</span>
-    <span class="game-name">1.12.2 Test</span>
+
+    <span class="game-letter">
+        1.12T
+    </span>
+
+    <span class="game-name">
+        1.12.2 Test
+    </span>
+
 </button>
 
 
@@ -657,10 +839,18 @@
 
 <button
     class="game-button eaglermod-button"
-    onclick="location.href='assets/jello/eaglermod.html'"
+    onclick="location.href=
+        'assets/jello/eaglermod.html'"
 >
-    <span class="game-letter">EM</span>
-    <span class="game-name">EaglerMod Shit</span>
+
+    <span class="game-letter">
+        EM
+    </span>
+
+    <span class="game-name">
+        EaglerMod Shit
+    </span>
+
 </button>
 
 
@@ -668,10 +858,19 @@
 
 <button
     class="game-button aeroclient-button"
-    onclick="launchEaglercraft('assets/jello/AeroClient.html')"
+    onclick="launchEaglercraft(
+        'assets/jello/AeroClient.html'
+    )"
 >
-    <span class="game-letter">A</span>
-    <span class="game-name">AeroClient</span>
+
+    <span class="game-letter">
+        A
+    </span>
+
+    <span class="game-name">
+        AeroClient
+    </span>
+
 </button>
 
 
@@ -679,10 +878,19 @@
 
 <button
     class="game-button resent-button"
-    onclick="launchEaglercraft('assets/jello/resent.html')"
+    onclick="launchEaglercraft(
+        'assets/jello/resent.html'
+    )"
 >
-    <span class="game-letter">R</span>
-    <span class="game-name">Resent</span>
+
+    <span class="game-letter">
+        R
+    </span>
+
+    <span class="game-name">
+        Resent
+    </span>
+
 </button>
 
 
@@ -690,10 +898,18 @@
 
 <button
     class="game-button btd5-button"
-    onclick="location.href='assets/jello/btd5.html'"
+    onclick="location.href=
+        'assets/jello/btd5.html'"
 >
-    <span class="game-letter">B</span>
-    <span class="game-name">Bloons TD 5</span>
+
+    <span class="game-letter">
+        B
+    </span>
+
+    <span class="game-name">
+        Bloons TD 5
+    </span>
+
 </button>
 
 
@@ -701,10 +917,18 @@
 
 <button
     class="game-button terraria-button"
-    onclick="location.href='assets/jello/terraria.html'"
+    onclick="location.href=
+        'assets/jello/terraria.html'"
 >
-    <span class="game-letter">T</span>
-    <span class="game-name">Terraria</span>
+
+    <span class="game-letter">
+        T
+    </span>
+
+    <span class="game-name">
+        Terraria
+    </span>
+
 </button>
 
 
@@ -712,10 +936,18 @@
 
 <button
     class="game-button nzp-button"
-    onclick="location.href='assets/jello/nzp/index.html'"
+    onclick="location.href=
+        'assets/jello/nzp/index.html'"
 >
-    <span class="game-letter">N</span>
-    <span class="game-name">NZP</span>
+
+    <span class="game-letter">
+        N
+    </span>
+
+    <span class="game-name">
+        NZP
+    </span>
+
 </button>
 
 
@@ -723,16 +955,25 @@
 
 <button
     class="game-button webretro-button"
-    onclick="location.href='assets/jello/webretro/index.html'"
+    onclick="location.href=
+        'assets/jello/webretro/index.html'"
 >
-    <span class="game-letter">W</span>
-    <span class="game-name">WebRetro</span>
+
+    <span class="game-letter">
+        W
+    </span>
+
+    <span class="game-name">
+        WebRetro
+    </span>
+
 </button>
-```
 
 </div>
 
-<!-- Back Button -->
+<!-- =========================
+     BACK BUTTON
+========================= -->
 
 <button
 class="back-button"
@@ -740,33 +981,41 @@ onclick="location.href='index.html'"
 
 >
 
-```
-<span class="back-letter">←</span>
-```
+<span class="back-letter">
+    ←
+</span>
 
-```
-<span class="back-text">Back</span>
-```
+<span class="back-text">
+    Back
+</span>
 
 </button>
 
-<!-- Quick Settings -->
+<!-- =========================
+     QUICK SETTINGS
+========================= -->
 
 <div
     id="quickSettings"
     class="quick-settings"
 >
 
-```
-<div class="quick-settings-box">
+<div
+    class="quick-settings-box"
+>
 
-    <h2>Settings</h2>
+    <h2>
+        Settings
+    </h2>
+
 
     <!-- No Tab Close -->
 
     <div class="quick-setting">
 
-        <span>No Tab Close</span>
+        <span>
+            No Tab Close
+        </span>
 
         <label class="switch">
 
@@ -786,7 +1035,9 @@ onclick="location.href='index.html'"
 
     <div class="quick-setting">
 
-        <span>Full Screen</span>
+        <span>
+            Full Screen
+        </span>
 
         <label class="switch">
 
@@ -802,11 +1053,13 @@ onclick="location.href='index.html'"
     </div>
 
 
-    <!-- Mouse Background Movement -->
+    <!-- Mouse Background -->
 
     <div class="quick-setting">
 
-        <span>Mouse Background Movement</span>
+        <span>
+            Mouse Background Movement
+        </span>
 
         <label class="switch">
 
@@ -826,7 +1079,9 @@ onclick="location.href='index.html'"
 
     <div class="quick-setting">
 
-        <span>Jello Music</span>
+        <span>
+            Jello Music
+        </span>
 
         <button
             class="music-open-button"
@@ -843,19 +1098,20 @@ onclick="location.href='index.html'"
     </p>
 
 </div>
-```
 
 </div>
 
-<!-- Jello Music Popup -->
+<!-- =========================
+     MUSIC POPUP
+========================= -->
 
 <div
     id="musicPopup"
     class="music-popup"
 >
-
-```
-<div class="music-popup-box">
+<div
+    class="music-popup-box"
+>
 
     <button
         class="music-popup-close"
@@ -864,6 +1120,7 @@ onclick="location.href='index.html'"
         ×
     </button>
 
+
     <iframe
         src="about:blank"
         id="musicFrame"
@@ -871,99 +1128,133 @@ onclick="location.href='index.html'"
     ></iframe>
 
 </div>
-```
 
 </div>
 
 <script>
 
     /* =========================
-       TAB NAME + ICON SETTINGS
+       TAB NAME + ICON
     ========================= */
 
-    function getTabName() {
+    function getSavedTabName() {
 
         return (
-            localStorage.getItem("tabName") ||
+            localStorage.getItem("tabName")
+            ||
             "Sigma Jello"
         );
 
     }
 
 
-    function getTabIcon() {
+    function getSavedTabIcon() {
 
         return (
-            localStorage.getItem("tabIcon") ||
+            localStorage.getItem("tabIcon")
+            ||
             "assets/icons/sigma.jpg"
         );
 
     }
 
 
-    function applyTabSettingsToWindow(
-        gameWindow
-    ) {
+    function getAbsoluteURL(path) {
 
-        if (!gameWindow || gameWindow.closed) {
-            return;
-        }
+        return new URL(
+            path,
+            window.location.href
+        ).href;
 
+    }
+
+
+    function applyTabSettings() {
 
         const tabName =
-            getTabName();
+            getSavedTabName();
 
         const tabIcon =
-            getTabIcon();
+            getSavedTabIcon();
 
 
-        try {
+        /* TAB TITLE */
 
-            gameWindow.document.title =
-                tabName;
-
-
-            let favicon =
-                gameWindow.document.querySelector(
-                    'link[rel="icon"]'
-                );
+        document.title =
+            tabName;
 
 
-            if (!favicon) {
+        /* FAVICON */
 
-                favicon =
-                    gameWindow.document.createElement(
-                        "link"
-                    );
-
-                favicon.rel = "icon";
-
-                gameWindow.document.head.appendChild(
-                    favicon
-                );
-
-            }
-
-
-            favicon.href = tabIcon;
-
-        } catch (error) {
-
-            console.log(
-                "Could not apply tab settings:",
-                error
+        const favicon =
+            document.getElementById(
+                "siteFavicon"
             );
+
+
+        if (favicon) {
+
+            /*
+             * Cache busting forces Chrome
+             * to reload the new icon.
+             */
+
+            favicon.href =
+                getAbsoluteURL(tabIcon)
+                +
+                "?v="
+                +
+                Date.now();
 
         }
 
     }
 
 
+    applyTabSettings();
+
+
     /* =========================
-       EAGLERCRAFT / GAME LAUNCHER
+       WATCH FOR SETTINGS CHANGES
     ========================= */
 
-    function launchEaglercraft(gamePath) {
+    window.addEventListener(
+        "storage",
+        function(event) {
+
+            if (
+                event.key === "tabName"
+                ||
+                event.key === "tabIcon"
+                ||
+                event.key === null
+            ) {
+
+                applyTabSettings();
+
+            }
+
+        }
+    );
+
+
+    window.addEventListener(
+        "pageshow",
+        function() {
+
+            applyTabSettings();
+
+        }
+    );
+
+
+    /* =========================
+       GAME LAUNCHER
+    ========================= */
+
+    function launchEaglercraft(
+        gamePath
+    ) {
 
         const gameWindow =
             window.open(
@@ -984,20 +1275,23 @@ onclick="location.href='index.html'"
 
 
         const gameURL =
-            new URL(
-                gamePath,
-                window.location.href
-            ).href;
+            getAbsoluteURL(
+                gamePath
+            );
 
 
         const tabName =
-            getTabName();
+            getSavedTabName();
+
 
         const tabIcon =
-            getTabIcon();
+            getAbsoluteURL(
+                getSavedTabIcon()
+            );
 
 
         gameWindow.document.open();
+
 
         gameWindow.document.write(`
 
@@ -1013,7 +1307,9 @@ onclick="location.href='index.html'"
 
                 <link
                     rel="icon"
-                    href="${escapeHTML(tabIcon)}"
+                    href="${escapeHTML(
+                        tabIcon
+                    )}?v=${Date.now()}"
                 >
 
                 <style>
@@ -1022,9 +1318,11 @@ onclick="location.href='index.html'"
                     body {
 
                         margin: 0;
+
                         padding: 0;
 
                         width: 100%;
+
                         height: 100%;
 
                         overflow: hidden;
@@ -1033,9 +1331,11 @@ onclick="location.href='index.html'"
 
                     }
 
+
                     iframe {
 
                         width: 100%;
+
                         height: 100%;
 
                         border: none;
@@ -1045,14 +1345,14 @@ onclick="location.href='index.html'"
                     }
 
                 </style>
-
-```
         </head>
 
         <body>
 
             <iframe
-                src="${escapeHTML(gameURL)}"
+                src="${escapeHTML(
+                    gameURL
+                )}"
                 allowfullscreen>
             </iframe>
 
@@ -1061,6 +1361,7 @@ onclick="location.href='index.html'"
         </html>
 
     `);
+
 
     gameWindow.document.close();
 
@@ -1074,35 +1375,67 @@ onclick="location.href='index.html'"
 function escapeHTML(value) {
 
     return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
 
 /* =========================
-   QUICK SETTINGS
+   QUICK SETTINGS ELEMENTS
 ========================= */
 
 const quickSettings =
-    document.getElementById("quickSettings");
+    document.getElementById(
+        "quickSettings"
+    );
+
 
 const quickNoTabClose =
-    document.getElementById("quickNoTabClose");
+    document.getElementById(
+        "quickNoTabClose"
+    );
+
 
 const quickFullscreen =
-    document.getElementById("quickFullscreen");
+    document.getElementById(
+        "quickFullscreen"
+    );
+
 
 const quickMouseBackground =
     document.getElementById(
         "quickMouseBackground"
     );
 
+
 const background =
-    document.getElementById("background");
+    document.getElementById(
+        "background"
+    );
 
 
 /* =========================
@@ -1127,17 +1460,20 @@ function enableNoTabClose() {
 
 function disableNoTabClose() {
 
-    window.onbeforeunload = null;
+    window.onbeforeunload =
+        null;
 
 }
 
 
 if (
-    localStorage.getItem("noTabClose")
-    === "true"
+    localStorage.getItem(
+        "noTabClose"
+    ) === "true"
 ) {
 
-    quickNoTabClose.checked = true;
+    quickNoTabClose.checked =
+        true;
 
     enableNoTabClose();
 
@@ -1183,18 +1519,22 @@ quickFullscreen.addEventListener(
         if (this.checked) {
 
             if (
-                document.documentElement
+                document
+                    .documentElement
                     .requestFullscreen
             ) {
 
-                document.documentElement
+                document
+                    .documentElement
                     .requestFullscreen();
 
             }
 
         } else {
 
-            if (document.fullscreenElement) {
+            if (
+                document.fullscreenElement
+            ) {
 
                 document.exitFullscreen();
 
@@ -1218,12 +1558,13 @@ document.addEventListener(
 
 
 /* =========================
-   MOUSE BACKGROUND MOVEMENT
+   MOUSE BACKGROUND
 ========================= */
 
 let mouseBackgroundEnabled =
-    localStorage.getItem("mouseBackground")
-    !== "false";
+    localStorage.getItem(
+        "mouseBackground"
+    ) !== "false";
 
 
 quickMouseBackground.checked =
@@ -1234,28 +1575,42 @@ document.addEventListener(
     "mousemove",
     function(event) {
 
-        if (!mouseBackgroundEnabled) {
+        if (
+            !mouseBackgroundEnabled
+        ) {
+
             return;
+
         }
 
+
         const x =
-            (event.clientX /
-                window.innerWidth) - 0.5;
+            (
+                event.clientX /
+                window.innerWidth
+            ) - 0.5;
+
 
         const y =
-            (event.clientY /
-                window.innerHeight) - 0.5;
+            (
+                event.clientY /
+                window.innerHeight
+            ) - 0.5;
 
 
         const moveX =
             x * 35;
+
 
         const moveY =
             y * 35;
 
 
         background.style.transform =
-            `translate(${moveX}px, ${moveY}px)`;
+            `translate(
+                ${moveX}px,
+                ${moveY}px
+            )`;
 
     }
 );
@@ -1275,7 +1630,9 @@ quickMouseBackground.addEventListener(
         );
 
 
-        if (!mouseBackgroundEnabled) {
+        if (
+            !mouseBackgroundEnabled
+        ) {
 
             background.style.transform =
                 "translate(0px, 0px)";
@@ -1287,32 +1644,48 @@ quickMouseBackground.addEventListener(
 
 
 /* =========================
-   JELLO MUSIC POPUP
+   MUSIC POPUP
 ========================= */
 
 const musicPopup =
-    document.getElementById("musicPopup");
+    document.getElementById(
+        "musicPopup"
+    );
+
 
 const musicFrame =
-    document.getElementById("musicFrame");
+    document.getElementById(
+        "musicFrame"
+    );
 
 
 function openMusicPopup() {
 
-    quickSettings.classList.remove("show");
+    quickSettings.classList.remove(
+        "show"
+    );
 
-    musicFrame.src = "music.html";
 
-    musicPopup.classList.add("show");
+    musicFrame.src =
+        "music.html";
+
+
+    musicPopup.classList.add(
+        "show"
+    );
 
 }
 
 
 function closeMusicPopup() {
 
-    musicPopup.classList.remove("show");
+    musicPopup.classList.remove(
+        "show"
+    );
 
-    musicFrame.src = "about:blank";
+
+    musicFrame.src =
+        "about:blank";
 
 }
 
@@ -1322,7 +1695,8 @@ musicPopup.addEventListener(
     function(event) {
 
         if (
-            event.target === musicPopup
+            event.target ===
+            musicPopup
         ) {
 
             closeMusicPopup();
@@ -1341,37 +1715,53 @@ window.addEventListener(
     "keydown",
     function(event) {
 
-        if (event.code === "KeyP") {
+        if (
+            event.code !== "KeyP"
+        ) {
 
-            if (event.repeat) return;
-
-            event.preventDefault();
-
-
-            if (
-                musicPopup.classList.contains(
-                    "show"
-                )
-            ) {
-
-                closeMusicPopup();
-
-            } else {
-
-                quickSettings.classList.toggle(
-                    "show"
-                );
-
-            }
+            return;
 
         }
+
+
+        if (event.repeat) {
+
+            return;
+
+        }
+
+
+        /*
+         * Don't let the P key get
+         * stuck in a focused input.
+         */
+
+        event.preventDefault();
+
+
+        if (
+            musicPopup.classList.contains(
+                "show"
+            )
+        ) {
+
+            closeMusicPopup();
+
+            return;
+
+        }
+
+
+        quickSettings.classList.toggle(
+            "show"
+        );
 
     }
 );
 
 
 /* =========================
-   CLICK OUTSIDE QUICK SETTINGS
+   CLICK OUTSIDE SETTINGS
 ========================= */
 
 quickSettings.addEventListener(
@@ -1379,7 +1769,8 @@ quickSettings.addEventListener(
     function(event) {
 
         if (
-            event.target === quickSettings
+            event.target ===
+            quickSettings
         ) {
 
             quickSettings.classList.remove(
@@ -1390,6 +1781,8 @@ quickSettings.addEventListener(
 
     }
 );
+
+
 </script>
 
 </body>
