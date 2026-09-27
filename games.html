@@ -1,7 +1,71 @@
 <!DOCTYPE html>
+
 <html>
 <head>
     <title>Sigma Jello - Games</title>
+<script>
+    /* =========================
+       SAVED TAB NAME + ICON
+    ========================= */
+
+    function applyTabSettings() {
+
+        const savedTabName =
+            localStorage.getItem("tabName");
+
+        const savedTabIcon =
+            localStorage.getItem("tabIcon");
+
+        document.title =
+            savedTabName ||
+            "Sigma Jello - Games";
+
+
+        let favicon =
+            document.querySelector(
+                'link[rel="icon"]'
+            );
+
+        if (!favicon) {
+
+            favicon =
+                document.createElement("link");
+
+            favicon.rel = "icon";
+
+            document.head.appendChild(
+                favicon
+            );
+
+        }
+
+        favicon.href =
+            savedTabIcon ||
+            "assets/icons/sigma.jpg";
+
+    }
+
+
+    applyTabSettings();
+
+
+    window.addEventListener(
+        "storage",
+        function(event) {
+
+            if (
+                event.key === "tabName" ||
+                event.key === "tabIcon"
+            ) {
+
+                applyTabSettings();
+
+            }
+
+        }
+    );
+</script>
+```
 
 <style>
     * {
@@ -127,10 +191,6 @@
     }
 
     .eaglercraft-112-button:hover {
-        width: 180px;
-    }
-
-    .eaglercraft-120-button:hover {
         width: 180px;
     }
 
@@ -531,169 +591,164 @@
     class="background"
 ></div>
 
-
 <h1>Games</h1>
-
 
 <!-- Game Buttons -->
 
 <div class="game-buttons">
 
-    <!-- Eaglercraft 1.5.2 -->
+```
+<!-- Eaglercraft 1.5.2 -->
 
-    <button
-        class="game-button eaglercraft-15-button"
-        onclick="launchEaglercraft('assets/jello/1.5.2.html')"
-    >
-        <span class="game-letter">1.5</span>
-        <span class="game-name">1.5 Eaglercraft</span>
-    </button>
-
-
-    <!-- Eaglercraft 1.8.8 -->
-
-    <button
-        class="game-button eaglercraft-18-button"
-        onclick="launchEaglercraft('assets/jello/1.8.html')"
-    >
-        <span class="game-letter">1.8</span>
-        <span class="game-name">1.8 Eaglercraft</span>
-    </button>
+<button
+    class="game-button eaglercraft-15-button"
+    onclick="launchEaglercraft('assets/jello/1.5.2.html')"
+>
+    <span class="game-letter">1.5</span>
+    <span class="game-name">1.5 Eaglercraft</span>
+</button>
 
 
-    <!-- Eaglercraft 1.9 -->
+<!-- Eaglercraft 1.8.8 -->
 
-    <button
-        class="game-button eaglercraft-19-button"
-        onclick="launchEaglercraft('assets/jello/1.9.html')"
-    >
-        <span class="game-letter">1.9</span>
-        <span class="game-name">1.9 Eaglercraft</span>
-    </button>
-
-
-    <!-- Eaglercraft 1.12.2 -->
-
-    <button
-        class="game-button eaglercraft-112-button"
-        onclick="launchEaglercraft('assets/jello/1.12.2.html')"
-    >
-        <span class="game-letter">1.12</span>
-        <span class="game-name">1.12.2 Eaglercraft</span>
-    </button>
+<button
+    class="game-button eaglercraft-18-button"
+    onclick="launchEaglercraft('assets/jello/1.8.html')"
+>
+    <span class="game-letter">1.8</span>
+    <span class="game-name">1.8 Eaglercraft</span>
+</button>
 
 
-    <!-- Eaglercraft 1.20 -->
+<!-- Eaglercraft 1.9 -->
 
-    <button
-        class="game-button eaglercraft-120-button"
-        onclick="launchEaglercraft('assets/jello/eaglerstuff/1.20.html')"
-    >
-        <span class="game-letter">1.20</span>
-        <span class="game-name">1.20 Eaglercraft</span>
-    </button>
-
-
-    <!-- Eaglercraft 1.12.2 Test -->
-
-    <button
-        class="game-button eaglercraft-112-test-button"
-        onclick="launchEaglercraft('assets/jello/1.12.2js.html')"
-    >
-        <span class="game-letter">1.12T</span>
-        <span class="game-name">1.12.2 Test</span>
-    </button>
+<button
+    class="game-button eaglercraft-19-button"
+    onclick="launchEaglercraft('assets/jello/1.9.html')"
+>
+    <span class="game-letter">1.9</span>
+    <span class="game-name">1.9 Eaglercraft</span>
+</button>
 
 
-    <!-- EaglerMod Shit -->
+<!-- Eaglercraft 1.12.2 -->
 
-    <button
-        class="game-button eaglermod-button"
-        onclick="location.href='assets/jello/eaglermod.html'"
-    >
-        <span class="game-letter">EM</span>
-        <span class="game-name">EaglerMod Shit</span>
-    </button>
-
-
-    <!-- AeroClient -->
-
-    <button
-        class="game-button aeroclient-button"
-        onclick="launchEaglercraft('assets/jello/AeroClient.html')"
-    >
-        <span class="game-letter">A</span>
-        <span class="game-name">AeroClient</span>
-    </button>
+<button
+    class="game-button eaglercraft-112-button"
+    onclick="launchEaglercraft('assets/jello/1.12.2.html')"
+>
+    <span class="game-letter">1.12</span>
+    <span class="game-name">1.12.2 Eaglercraft</span>
+</button>
 
 
-    <!-- Resent -->
+<!-- Eaglercraft 1.12.2 Test -->
 
-    <button
-        class="game-button resent-button"
-        onclick="launchEaglercraft('assets/jello/resent.html')"
-    >
-        <span class="game-letter">R</span>
-        <span class="game-name">Resent</span>
-    </button>
-
-
-    <!-- Bloons TD 5 -->
-
-    <button
-        class="game-button btd5-button"
-        onclick="location.href='assets/jello/btd5.html'"
-    >
-        <span class="game-letter">B</span>
-        <span class="game-name">Bloons TD 5</span>
-    </button>
+<button
+    class="game-button eaglercraft-112-test-button"
+    onclick="launchEaglercraft('assets/jello/1.12.2js.html')"
+>
+    <span class="game-letter">1.12T</span>
+    <span class="game-name">1.12.2 Test</span>
+</button>
 
 
-    <!-- Terraria -->
+<!-- EaglerMod Shit -->
 
-    <button
-        class="game-button terraria-button"
-        onclick="location.href='assets/jello/terraria.html'"
-    >
-        <span class="game-letter">T</span>
-        <span class="game-name">Terraria</span>
-    </button>
-
-
-    <!-- NZP -->
-
-    <button
-        class="game-button nzp-button"
-        onclick="location.href='assets/jello/nzp/index.html'"
-    >
-        <span class="game-letter">N</span>
-        <span class="game-name">NZP</span>
-    </button>
+<button
+    class="game-button eaglermod-button"
+    onclick="location.href='assets/jello/eaglermod.html'"
+>
+    <span class="game-letter">EM</span>
+    <span class="game-name">EaglerMod Shit</span>
+</button>
 
 
-    <!-- WebRetro -->
+<!-- AeroClient -->
 
-    <button
-        class="game-button webretro-button"
-        onclick="location.href='assets/jello/webretro/index.html'"
-    >
-        <span class="game-letter">W</span>
-        <span class="game-name">WebRetro</span>
-    </button>
+<button
+    class="game-button aeroclient-button"
+    onclick="launchEaglercraft('assets/jello/AeroClient.html')"
+>
+    <span class="game-letter">A</span>
+    <span class="game-name">AeroClient</span>
+</button>
+
+
+<!-- Resent -->
+
+<button
+    class="game-button resent-button"
+    onclick="launchEaglercraft('assets/jello/resent.html')"
+>
+    <span class="game-letter">R</span>
+    <span class="game-name">Resent</span>
+</button>
+
+
+<!-- Bloons TD 5 -->
+
+<button
+    class="game-button btd5-button"
+    onclick="location.href='assets/jello/btd5.html'"
+>
+    <span class="game-letter">B</span>
+    <span class="game-name">Bloons TD 5</span>
+</button>
+
+
+<!-- Terraria -->
+
+<button
+    class="game-button terraria-button"
+    onclick="location.href='assets/jello/terraria.html'"
+>
+    <span class="game-letter">T</span>
+    <span class="game-name">Terraria</span>
+</button>
+
+
+<!-- NZP -->
+
+<button
+    class="game-button nzp-button"
+    onclick="location.href='assets/jello/nzp/index.html'"
+>
+    <span class="game-letter">N</span>
+    <span class="game-name">NZP</span>
+</button>
+
+
+<!-- WebRetro -->
+
+<button
+    class="game-button webretro-button"
+    onclick="location.href='assets/jello/webretro/index.html'"
+>
+    <span class="game-letter">W</span>
+    <span class="game-name">WebRetro</span>
+</button>
+```
 
 </div>
-
 
 <!-- Back Button -->
 
 <button
-    class="back-button"
-    onclick="location.href='index.html'"
->
-    <span class="back-letter">←</span>
-    <span class="back-text">Back</span>
-</button>
+class="back-button"
+onclick="location.href='index.html'"
 
+>
+
+```
+<span class="back-letter">←</span>
+```
+
+```
+<span class="back-text">Back</span>
+```
+
+</button>
 
 <!-- Quick Settings -->
 
@@ -702,94 +757,95 @@
     class="quick-settings"
 >
 
-    <div class="quick-settings-box">
+```
+<div class="quick-settings-box">
 
-        <h2>Settings</h2>
+    <h2>Settings</h2>
 
-        <!-- No Tab Close -->
+    <!-- No Tab Close -->
 
-        <div class="quick-setting">
+    <div class="quick-setting">
 
-            <span>No Tab Close</span>
+        <span>No Tab Close</span>
 
-            <label class="switch">
+        <label class="switch">
 
-                <input
-                    type="checkbox"
-                    id="quickNoTabClose"
-                >
-
-                <span class="slider"></span>
-
-            </label>
-
-        </div>
-
-
-        <!-- Full Screen -->
-
-        <div class="quick-setting">
-
-            <span>Full Screen</span>
-
-            <label class="switch">
-
-                <input
-                    type="checkbox"
-                    id="quickFullscreen"
-                >
-
-                <span class="slider"></span>
-
-            </label>
-
-        </div>
-
-
-        <!-- Mouse Background Movement -->
-
-        <div class="quick-setting">
-
-            <span>Mouse Background Movement</span>
-
-            <label class="switch">
-
-                <input
-                    type="checkbox"
-                    id="quickMouseBackground"
-                >
-
-                <span class="slider"></span>
-
-            </label>
-
-        </div>
-
-
-        <!-- Jello Music -->
-
-        <div class="quick-setting">
-
-            <span>Jello Music</span>
-
-            <button
-                class="music-open-button"
-                onclick="openMusicPopup()"
+            <input
+                type="checkbox"
+                id="quickNoTabClose"
             >
-                Open
-            </button>
 
-        </div>
+            <span class="slider"></span>
 
-
-        <p class="hint">
-            Press P to close
-        </p>
+        </label>
 
     </div>
 
-</div>
 
+    <!-- Full Screen -->
+
+    <div class="quick-setting">
+
+        <span>Full Screen</span>
+
+        <label class="switch">
+
+            <input
+                type="checkbox"
+                id="quickFullscreen"
+            >
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+
+    <!-- Mouse Background Movement -->
+
+    <div class="quick-setting">
+
+        <span>Mouse Background Movement</span>
+
+        <label class="switch">
+
+            <input
+                type="checkbox"
+                id="quickMouseBackground"
+            >
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+
+    <!-- Jello Music -->
+
+    <div class="quick-setting">
+
+        <span>Jello Music</span>
+
+        <button
+            class="music-open-button"
+            onclick="openMusicPopup()"
+        >
+            Open
+        </button>
+
+    </div>
+
+
+    <p class="hint">
+        Press P to close
+    </p>
+
+</div>
+```
+
+</div>
 
 <!-- Jello Music Popup -->
 
@@ -798,27 +854,110 @@
     class="music-popup"
 >
 
-    <div class="music-popup-box">
+```
+<div class="music-popup-box">
 
-        <button
-            class="music-popup-close"
-            onclick="closeMusicPopup()"
-        >
-            ×
-        </button>
+    <button
+        class="music-popup-close"
+        onclick="closeMusicPopup()"
+    >
+        ×
+    </button>
 
-        <iframe
-            src="about:blank"
-            id="musicFrame"
-            title="Jello Music"
-        ></iframe>
+    <iframe
+        src="about:blank"
+        id="musicFrame"
+        title="Jello Music"
+    ></iframe>
 
-    </div>
+</div>
+```
 
 </div>
 
-
 <script>
+
+    /* =========================
+       TAB NAME + ICON SETTINGS
+    ========================= */
+
+    function getTabName() {
+
+        return (
+            localStorage.getItem("tabName") ||
+            "Sigma Jello"
+        );
+
+    }
+
+
+    function getTabIcon() {
+
+        return (
+            localStorage.getItem("tabIcon") ||
+            "assets/icons/sigma.jpg"
+        );
+
+    }
+
+
+    function applyTabSettingsToWindow(
+        gameWindow
+    ) {
+
+        if (!gameWindow || gameWindow.closed) {
+            return;
+        }
+
+
+        const tabName =
+            getTabName();
+
+        const tabIcon =
+            getTabIcon();
+
+
+        try {
+
+            gameWindow.document.title =
+                tabName;
+
+
+            let favicon =
+                gameWindow.document.querySelector(
+                    'link[rel="icon"]'
+                );
+
+
+            if (!favicon) {
+
+                favicon =
+                    gameWindow.document.createElement(
+                        "link"
+                    );
+
+                favicon.rel = "icon";
+
+                gameWindow.document.head.appendChild(
+                    favicon
+                );
+
+            }
+
+
+            favicon.href = tabIcon;
+
+        } catch (error) {
+
+            console.log(
+                "Could not apply tab settings:",
+                error
+            );
+
+        }
+
+    }
+
 
     /* =========================
        EAGLERCRAFT / GAME LAUNCHER
@@ -827,7 +966,10 @@
     function launchEaglercraft(gamePath) {
 
         const gameWindow =
-            window.open("about:blank", "_blank");
+            window.open(
+                "about:blank",
+                "_blank"
+            );
 
 
         if (!gameWindow) {
@@ -837,6 +979,7 @@
             );
 
             return;
+
         }
 
 
@@ -845,6 +988,13 @@
                 gamePath,
                 window.location.href
             ).href;
+
+
+        const tabName =
+            getTabName();
+
+        const tabIcon =
+            getTabIcon();
 
 
         gameWindow.document.open();
@@ -857,7 +1007,14 @@
 
             <head>
 
-                <title>about:blank</title>
+                <title>
+                    ${escapeHTML(tabName)}
+                </title>
+
+                <link
+                    rel="icon"
+                    href="${escapeHTML(tabIcon)}"
+                >
 
                 <style>
 
@@ -889,334 +1046,350 @@
 
                 </style>
 
-            </head>
+```
+        </head>
 
-            <body>
+        <body>
 
-                <iframe
-                    src="${gameURL}"
-                    allowfullscreen>
-                </iframe>
+            <iframe
+                src="${escapeHTML(gameURL)}"
+                allowfullscreen>
+            </iframe>
 
-            </body>
+        </body>
 
-            </html>
+        </html>
 
-        `);
+    `);
 
-        gameWindow.document.close();
+    gameWindow.document.close();
 
-    }
-
-
-    /* =========================
-       QUICK SETTINGS
-    ========================= */
-
-    const quickSettings =
-        document.getElementById("quickSettings");
-
-    const quickNoTabClose =
-        document.getElementById("quickNoTabClose");
-
-    const quickFullscreen =
-        document.getElementById("quickFullscreen");
-
-    const quickMouseBackground =
-        document.getElementById(
-            "quickMouseBackground"
-        );
-
-    const background =
-        document.getElementById("background");
+}
 
 
-    /* =========================
-       NO TAB CLOSE
-    ========================= */
+/* =========================
+   HTML ESCAPE
+========================= */
 
-    function enableNoTabClose() {
+function escapeHTML(value) {
 
-        window.onbeforeunload =
-            function(event) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
-                event.preventDefault();
-
-                event.returnValue = "";
-
-                return "";
-
-            };
-
-    }
+}
 
 
-    function disableNoTabClose() {
+/* =========================
+   QUICK SETTINGS
+========================= */
 
-        window.onbeforeunload = null;
+const quickSettings =
+    document.getElementById("quickSettings");
 
-    }
+const quickNoTabClose =
+    document.getElementById("quickNoTabClose");
 
+const quickFullscreen =
+    document.getElementById("quickFullscreen");
 
-    if (
-        localStorage.getItem("noTabClose")
-        === "true"
-    ) {
-
-        quickNoTabClose.checked = true;
-
-        enableNoTabClose();
-
-    }
-
-
-    quickNoTabClose.addEventListener(
-        "change",
-        function() {
-
-            if (this.checked) {
-
-                localStorage.setItem(
-                    "noTabClose",
-                    "true"
-                );
-
-                enableNoTabClose();
-
-            } else {
-
-                localStorage.setItem(
-                    "noTabClose",
-                    "false"
-                );
-
-                disableNoTabClose();
-
-            }
-
-        }
+const quickMouseBackground =
+    document.getElementById(
+        "quickMouseBackground"
     );
 
-
-    /* =========================
-       FULL SCREEN
-    ========================= */
-
-    quickFullscreen.addEventListener(
-        "change",
-        function() {
-
-            if (this.checked) {
-
-                if (
-                    document.documentElement
-                        .requestFullscreen
-                ) {
-
-                    document.documentElement
-                        .requestFullscreen();
-
-                }
-
-            } else {
-
-                if (document.fullscreenElement) {
-
-                    document.exitFullscreen();
-
-                }
-
-            }
-
-        }
-    );
+const background =
+    document.getElementById("background");
 
 
-    document.addEventListener(
-        "fullscreenchange",
-        function() {
+/* =========================
+   NO TAB CLOSE
+========================= */
 
-            quickFullscreen.checked =
-                !!document.fullscreenElement;
+function enableNoTabClose() {
 
-        }
-    );
-
-
-    /* =========================
-       MOUSE BACKGROUND MOVEMENT
-    ========================= */
-
-    let mouseBackgroundEnabled =
-        localStorage.getItem("mouseBackground")
-        !== "false";
-
-
-    quickMouseBackground.checked =
-        mouseBackgroundEnabled;
-
-
-    document.addEventListener(
-        "mousemove",
+    window.onbeforeunload =
         function(event) {
 
-            if (!mouseBackgroundEnabled) {
-                return;
-            }
+            event.preventDefault();
 
-            const x =
-                (event.clientX /
-                    window.innerWidth) - 0.5;
+            event.returnValue = "";
 
-            const y =
-                (event.clientY /
-                    window.innerHeight) - 0.5;
+            return "";
+
+        };
+
+}
 
 
-            const moveX =
-                x * 35;
+function disableNoTabClose() {
 
-            const moveY =
-                y * 35;
+    window.onbeforeunload = null;
 
-
-            background.style.transform =
-                `translate(${moveX}px, ${moveY}px)`;
-
-        }
-    );
+}
 
 
-    quickMouseBackground.addEventListener(
-        "change",
-        function() {
+if (
+    localStorage.getItem("noTabClose")
+    === "true"
+) {
 
-            mouseBackgroundEnabled =
-                this.checked;
+    quickNoTabClose.checked = true;
 
+    enableNoTabClose();
+
+}
+
+
+quickNoTabClose.addEventListener(
+    "change",
+    function() {
+
+        if (this.checked) {
 
             localStorage.setItem(
-                "mouseBackground",
-                mouseBackgroundEnabled
+                "noTabClose",
+                "true"
             );
 
+            enableNoTabClose();
 
-            if (!mouseBackgroundEnabled) {
+        } else {
 
-                background.style.transform =
-                    "translate(0px, 0px)";
+            localStorage.setItem(
+                "noTabClose",
+                "false"
+            );
+
+            disableNoTabClose();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   FULL SCREEN
+========================= */
+
+quickFullscreen.addEventListener(
+    "change",
+    function() {
+
+        if (this.checked) {
+
+            if (
+                document.documentElement
+                    .requestFullscreen
+            ) {
+
+                document.documentElement
+                    .requestFullscreen();
+
+            }
+
+        } else {
+
+            if (document.fullscreenElement) {
+
+                document.exitFullscreen();
 
             }
 
         }
-    );
-
-
-    /* =========================
-       JELLO MUSIC POPUP
-    ========================= */
-
-    const musicPopup =
-        document.getElementById("musicPopup");
-
-    const musicFrame =
-        document.getElementById("musicFrame");
-
-
-    function openMusicPopup() {
-
-        quickSettings.classList.remove("show");
-
-        musicFrame.src = "music.html";
-
-        musicPopup.classList.add("show");
 
     }
+);
 
 
-    function closeMusicPopup() {
+document.addEventListener(
+    "fullscreenchange",
+    function() {
 
-        musicPopup.classList.remove("show");
-
-        musicFrame.src = "about:blank";
+        quickFullscreen.checked =
+            !!document.fullscreenElement;
 
     }
+);
 
 
-    musicPopup.addEventListener(
-        "click",
-        function(event) {
+/* =========================
+   MOUSE BACKGROUND MOVEMENT
+========================= */
+
+let mouseBackgroundEnabled =
+    localStorage.getItem("mouseBackground")
+    !== "false";
+
+
+quickMouseBackground.checked =
+    mouseBackgroundEnabled;
+
+
+document.addEventListener(
+    "mousemove",
+    function(event) {
+
+        if (!mouseBackgroundEnabled) {
+            return;
+        }
+
+        const x =
+            (event.clientX /
+                window.innerWidth) - 0.5;
+
+        const y =
+            (event.clientY /
+                window.innerHeight) - 0.5;
+
+
+        const moveX =
+            x * 35;
+
+        const moveY =
+            y * 35;
+
+
+        background.style.transform =
+            `translate(${moveX}px, ${moveY}px)`;
+
+    }
+);
+
+
+quickMouseBackground.addEventListener(
+    "change",
+    function() {
+
+        mouseBackgroundEnabled =
+            this.checked;
+
+
+        localStorage.setItem(
+            "mouseBackground",
+            mouseBackgroundEnabled
+        );
+
+
+        if (!mouseBackgroundEnabled) {
+
+            background.style.transform =
+                "translate(0px, 0px)";
+
+        }
+
+    }
+);
+
+
+/* =========================
+   JELLO MUSIC POPUP
+========================= */
+
+const musicPopup =
+    document.getElementById("musicPopup");
+
+const musicFrame =
+    document.getElementById("musicFrame");
+
+
+function openMusicPopup() {
+
+    quickSettings.classList.remove("show");
+
+    musicFrame.src = "music.html";
+
+    musicPopup.classList.add("show");
+
+}
+
+
+function closeMusicPopup() {
+
+    musicPopup.classList.remove("show");
+
+    musicFrame.src = "about:blank";
+
+}
+
+
+musicPopup.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target === musicPopup
+        ) {
+
+            closeMusicPopup();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   P KEY
+========================= */
+
+window.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.code === "KeyP") {
+
+            if (event.repeat) return;
+
+            event.preventDefault();
+
 
             if (
-                event.target === musicPopup
+                musicPopup.classList.contains(
+                    "show"
+                )
             ) {
 
                 closeMusicPopup();
 
-            }
+            } else {
 
-        }
-    );
-
-
-    /* =========================
-       P KEY
-    ========================= */
-
-    window.addEventListener(
-        "keydown",
-        function(event) {
-
-            if (event.code === "KeyP") {
-
-                if (event.repeat) return;
-
-                event.preventDefault();
-
-
-                if (
-                    musicPopup.classList.contains(
-                        "show"
-                    )
-                ) {
-
-                    closeMusicPopup();
-
-                } else {
-
-                    quickSettings.classList.toggle(
-                        "show"
-                    );
-
-                }
-
-            }
-
-        }
-    );
-
-
-    /* =========================
-       CLICK OUTSIDE QUICK SETTINGS
-    ========================= */
-
-    quickSettings.addEventListener(
-        "click",
-        function(event) {
-
-            if (
-                event.target === quickSettings
-            ) {
-
-                quickSettings.classList.remove(
+                quickSettings.classList.toggle(
                     "show"
                 );
 
             }
 
         }
-    );
 
+    }
+);
+
+
+/* =========================
+   CLICK OUTSIDE QUICK SETTINGS
+========================= */
+
+quickSettings.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target === quickSettings
+        ) {
+
+            quickSettings.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
 </script>
 
 </body>
