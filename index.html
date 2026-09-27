@@ -3,6 +3,64 @@
 <html>
 <head>
     <title>Jello</title>
+
+    <link
+        id="jelloFavicon"
+        rel="icon"
+        type="image/jpeg"
+        href="assets/icons/sigma.jpg"
+    >
+
+    <script>
+        /* =========================
+           JELLO TAB SETTINGS
+           ========================= */
+
+        function applyJelloTabSettings() {
+
+            const savedTabName =
+                localStorage.getItem("jelloTabName");
+
+            const savedTabIcon =
+                localStorage.getItem("jelloTabIcon");
+
+            document.title =
+                savedTabName ||
+                "Jello";
+
+            const favicon =
+                document.getElementById(
+                    "jelloFavicon"
+                );
+
+            if (favicon) {
+
+                favicon.href =
+                    savedTabIcon ||
+                    "assets/icons/sigma.jpg";
+
+            }
+
+        }
+
+        applyJelloTabSettings();
+
+        window.addEventListener(
+            "storage",
+            function(event) {
+
+                if (
+                    event.key === "jelloTabName" ||
+                    event.key === "jelloTabIcon"
+                ) {
+
+                    applyJelloTabSettings();
+
+                }
+
+            }
+        );
+    </script>
 <style>
     body {
         margin: 0;
@@ -1378,7 +1436,7 @@
      ========================= -->
 
 <div class="version">
-    5.0.2 Beta
+    5.0.3 Beta
 </div>
 
 
@@ -1809,9 +1867,64 @@
 
             <head>
 
-                <title>
-                    about:blank
-                </title>
+                <title>Jello</title>
+
+                <link
+                    id="jelloFavicon"
+                    rel="icon"
+                    href="assets/icons/sigma.jpg"
+                >
+
+                <script>
+                    function applyJelloTabSettings() {
+
+                        const savedTabName =
+                            localStorage.getItem(
+                                "jelloTabName"
+                            );
+
+                        const savedTabIcon =
+                            localStorage.getItem(
+                                "jelloTabIcon"
+                            );
+
+                        document.title =
+                            savedTabName ||
+                            "Jello";
+
+                        const favicon =
+                            document.getElementById(
+                                "jelloFavicon"
+                            );
+
+                        if (favicon) {
+
+                            favicon.href =
+                                savedTabIcon ||
+                                "assets/icons/sigma.jpg";
+
+                        }
+
+                    }
+
+                    applyJelloTabSettings();
+
+                    window.addEventListener(
+                        "storage",
+                        function(event) {
+
+                            if (
+                                event.key === "jelloTabName" ||
+                                event.key === "jelloTabIcon"
+                            ) {
+
+                                applyJelloTabSettings();
+
+                            }
+
+                        }
+                    );
+                <\/script>
 
                 <style>
 
@@ -2461,9 +2574,64 @@
 
                 <head>
 
-                    <title>
-                        about:blank
-                    </title>
+                    <title>Jello</title>
+
+                    <link
+                        id="jelloFavicon"
+                        rel="icon"
+                        href="assets/icons/sigma.jpg"
+                    >
+
+                    <script>
+                        function applyJelloTabSettings() {
+
+                            const savedTabName =
+                                localStorage.getItem(
+                                    "jelloTabName"
+                                );
+
+                            const savedTabIcon =
+                                localStorage.getItem(
+                                    "jelloTabIcon"
+                                );
+
+                            document.title =
+                                savedTabName ||
+                                "Jello";
+
+                            const favicon =
+                                document.getElementById(
+                                    "jelloFavicon"
+                                );
+
+                            if (favicon) {
+
+                                favicon.href =
+                                    savedTabIcon ||
+                                    "assets/icons/sigma.jpg";
+
+                            }
+
+                        }
+
+                        applyJelloTabSettings();
+
+                        window.addEventListener(
+                            "storage",
+                            function(event) {
+
+                                if (
+                                    event.key === "jelloTabName" ||
+                                    event.key === "jelloTabIcon"
+                                ) {
+
+                                    applyJelloTabSettings();
+
+                                }
+
+                            }
+                        );
+                    <\/script>
 
                     <style>
 
