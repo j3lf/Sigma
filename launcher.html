@@ -6,77 +6,204 @@
     <script>
         function launch() {
 
-            // Open a new tab at about:blank
-            const newWindow = window.open("about:blank", "_blank");
+            /*
+             * =========================
+             * LOAD SIGMA JELLO SETTINGS
+             * =========================
+             */
 
-            // Check if the browser blocked the popup
+            const DEFAULT_TAB_NAME = "Sigma Jello";
+            const DEFAULT_TAB_ICON = "assets/icons/sigma.jpg";
+
+            const savedTabName =
+                localStorage.getItem("jelloTabName")
+                || DEFAULT_TAB_NAME;
+
+            const savedTabIcon =
+                localStorage.getItem("jelloTabIcon")
+                || DEFAULT_TAB_ICON;
+
+
+            /*
+             * =========================
+             * OPEN ABOUT:BLANK TAB
+             * =========================
+             */
+
+            const newWindow =
+                window.open(
+                    "about:blank",
+                    "_blank"
+                );
+
+
+            /*
+             * Check if popup was blocked
+             */
+
             if (!newWindow) {
+
                 document.body.innerHTML =
                     "<h2>Please allow pop-ups for this site.</h2>";
+
                 return;
             }
 
-            // Find index.html relative to the launcher
-            const indexURL = new URL(
-                "index.html",
-                window.location.href
-            ).href;
 
-            // Put index.html inside the about:blank tab
+            /*
+             * =========================
+             * APPLY TAB SETTINGS
+             * =========================
+             */
+
             newWindow.document.open();
 
             newWindow.document.write(`
                 <!DOCTYPE html>
+
                 <html>
+
                 <head>
-                    <title>about:blank</title>
+
+                    <title>
+                        ${escapeHTML(savedTabName)}
+                    </title>
+
+                    <link
+                        id="jelloFavicon"
+                        rel="icon"
+                        href="${escapeHTML(savedTabIcon)}"
+                    >
 
                     <style>
-                        html, body {
+
+                        html,
+                        body {
+
                             margin: 0;
                             padding: 0;
+
                             width: 100%;
                             height: 100%;
+
                             overflow: hidden;
+
                             background: black;
+
                         }
 
+
                         iframe {
+
                             width: 100%;
                             height: 100%;
+
                             border: none;
+
                             display: block;
+
                         }
+
                     </style>
+
                 </head>
+
 
                 <body>
 
                     <iframe
-                        src="${indexURL}"
+                        src="${new URL(
+                            "index.html",
+                            window.location.href
+                        ).href}"
                         allowfullscreen>
                     </iframe>
 
                 </body>
+
                 </html>
             `);
 
             newWindow.document.close();
 
 
-            // Send the original launcher tab to Google
-            window.location.href = "https://www.google.com";
+            /*
+             * =========================
+             * NO TAB CLOSE
+             * =========================
+             *
+             * Uses the exact same setting
+             * as settings.html.
+             */
+
+            if (
+                localStorage.getItem("noTabClose")
+                === "true"
+            ) {
+
+                newWindow.onbeforeunload =
+                    function(event) {
+
+                        event.preventDefault();
+
+                        event.returnValue = "";
+
+                        return "";
+
+                    };
+
+            }
+
+
+            /*
+             * =========================
+             * SEND LAUNCHER TO GOOGLE
+             * =========================
+             */
+
+            window.location.href =
+                "https://www.google.com";
         }
 
 
-        // Launch automatically when the page loads
+        /*
+         * =========================
+         * HTML ESCAPE
+         * =========================
+         *
+         * Prevents a custom tab name/icon
+         * from breaking the generated page.
+         */
+
+        function escapeHTML(value) {
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /*
+         * =========================
+         * LAUNCH AUTOMATICALLY
+         * =========================
+         */
+
         window.onload = launch;
+
     </script>
 </head>
 
+
 <body>
 
-    <h2>Launching Sigma Jello...</h2>
+    <h2>
+        Launching Sigma Jello...
+    </h2>
 
 </body>
 </html>
