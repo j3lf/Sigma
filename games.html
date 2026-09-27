@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
     <title>Sigma Jello - Games</title>
+
     <link
         id="siteFavicon"
         rel="icon"
@@ -21,6 +24,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
         }
+
         /* =========================
            BACKGROUND
         ========================= */
@@ -323,13 +327,13 @@
         }
 
         /* =========================
-           MUSIC BUTTON
+           SETTINGS BUTTONS
         ========================= */
 
-        .music-open-button {
-            width: 100%;
+        .settings-button {
+            width: 105px;
 
-            padding: 12px;
+            padding: 9px 12px;
 
             border: none;
             border-radius: 5px;
@@ -337,7 +341,44 @@
             background: #111;
             color: white;
 
-            font-size: 16px;
+            font-size: 14px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+
+            cursor: pointer;
+
+            transition:
+                background 0.15s ease,
+                transform 0.15s ease;
+        }
+
+        .settings-button:hover {
+            background: #333;
+            transform: translateX(3px);
+        }
+
+        /* Hidden file picker */
+
+        #logoFileInput {
+            display: none;
+        }
+
+        /* =========================
+           MUSIC BUTTON
+        ========================= */
+
+        .music-open-button {
+            width: 105px;
+
+            padding: 9px 12px;
+
+            border: none;
+            border-radius: 5px;
+
+            background: #111;
+            color: white;
+
+            font-size: 14px;
             font-weight: bold;
             font-family: Arial, sans-serif;
 
@@ -887,20 +928,40 @@
 
 
         <!-- =========================
-             TAB SETTINGS
+             CHANGE LOGO
         ========================= -->
 
         <div class="quick-setting">
 
             <span>
-                Apply Tab Settings
+                Change Logo
             </span>
 
             <button
-                class="music-open-button"
-                onclick="applyTabSettings(true)"
+                class="settings-button"
+                onclick="document.getElementById('logoFileInput').click()"
             >
-                Apply
+                Choose
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             CHANGE TAB NAME
+        ========================= -->
+
+        <div class="quick-setting">
+
+            <span>
+                Change Tab Name
+            </span>
+
+            <button
+                class="settings-button"
+                onclick="changeTabName()"
+            >
+                Change
             </button>
 
         </div>
@@ -913,6 +974,15 @@
     </div>
 
 </div>
+
+
+<!-- Hidden logo file picker -->
+
+<input
+    type="file"
+    id="logoFileInput"
+    accept="image/*"
+>
 
 
 <!-- =========================
@@ -1029,11 +1099,6 @@
         }
 
 
-        /*
-         * Create a completely new
-         * favicon URL every time.
-         */
-
         const iconURL =
             getAbsoluteURL(
                 savedTabIcon
@@ -1103,6 +1168,151 @@
 
 
     /* =========================
+       CHANGE TAB NAME
+       ========================= */
+
+    function changeTabName() {
+
+        const currentName =
+            getSavedTabName();
+
+
+        const newName =
+            prompt(
+                "Enter the new tab name:",
+                currentName
+            );
+
+
+        if (
+            newName === null
+        ) {
+
+            return;
+
+        }
+
+
+        const trimmedName =
+            newName.trim();
+
+
+        if (
+            trimmedName === ""
+        ) {
+
+            alert(
+                "The tab name cannot be empty."
+            );
+
+            return;
+
+        }
+
+
+        localStorage.setItem(
+            "tabName",
+            trimmedName
+        );
+
+
+        applyTabSettings(true);
+
+    }
+
+
+    /* =========================
+       CHANGE LOGO
+       ========================= */
+
+    const logoFileInput =
+        document.getElementById(
+            "logoFileInput"
+        );
+
+
+    logoFileInput.addEventListener(
+        "change",
+        function() {
+
+            const file =
+                this.files[0];
+
+
+            if (!file) {
+
+                return;
+
+            }
+
+
+            if (
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
+
+                alert(
+                    "Please choose an image file."
+                );
+
+                this.value = "";
+
+                return;
+
+            }
+
+
+            /*
+             * Convert the selected image
+             * into a data URL so it can
+             * be saved in localStorage.
+             */
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+                    try {
+
+                        localStorage.setItem(
+                            "tabIcon",
+                            event.target.result
+                        );
+
+
+                        applyTabSettings(
+                            true
+                        );
+
+                    } catch (error) {
+
+                        alert(
+                            "That image is too large to save in browser storage. Try a smaller image."
+                        );
+
+                    }
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+
+            /* Allow selecting the same file again */
+
+            this.value = "";
+
+        }
+    );
+
+
+    /* =========================
        WATCH FOR CHANGES
        ========================= */
 
@@ -1125,11 +1335,6 @@
         }
     );
 
-
-    /*
-     * Re-apply when Games page
-     * becomes visible again.
-     */
 
     window.addEventListener(
         "pageshow",
@@ -1671,3 +1876,4 @@
 
 </body>
 </html>
+
