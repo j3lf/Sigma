@@ -1,577 +1,582 @@
 <!DOCTYPE html>
+
 <html>
 
 <head>
 
-    <title>Sigma Jello - Games</title>
+<title>Sigma Jello - Games</title>
 
-    <link
-        id="siteFavicon"
-        rel="icon"
-        href="assets/icons/sigma.jpg"
-    >
+<link
+    id="siteFavicon"
+    rel="icon"
+    href="assets/icons/sigma.jpg"
+>
 
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            background: #000;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-
-        /* =========================
-           BACKGROUND
-        ========================= */
-
-        .background {
-            position: fixed;
-            inset: -40px;
-
-            background:
-                url("assets/backroundjello.png")
-                center center / cover no-repeat;
-
-            z-index: 0;
-
-            transform: translate(0px, 0px);
-
-            transition:
-                transform 0.15s ease-out;
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: #000;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    /* =========================
+       BACKGROUND
+    ========================= */
+
+    .background {
+        position: fixed;
+        inset: -40px;
+
+        background:
+            url("assets/backroundjello.png")
+            center center / cover no-repeat;
+
+        z-index: 0;
+
+        transform: translate(0px, 0px);
+
+        transition:
+            transform 0.15s ease-out;
 
-            pointer-events: none;
-        }
-
-        h1 {
-            margin-top: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* =========================
-           GAME BUTTONS
-        ========================= */
-
-        .game-buttons {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            gap: 18px;
-            margin-top: 35px;
-
-            position: relative;
-            z-index: 1;
+        pointer-events: none;
+    }
+
+    h1 {
+        margin-top: 30px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* =========================
+       GAME BUTTONS
+    ========================= */
+
+    .game-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        gap: 18px;
+        margin-top: 35px;
+
+        position: relative;
+        z-index: 1;
 
-            flex-wrap: wrap;
-        }
-
-        .game-button {
-            width: 85px;
-            height: 85px;
-
-            padding: 0;
-            margin: 5px;
-
-            border-radius: 50%;
-            border: none;
-
-            background: white;
-            color: black;
+        flex-wrap: wrap;
+    }
+
+    .game-button {
+        width: 85px;
+        height: 85px;
+
+        padding: 0;
+        margin: 5px;
+
+        border-radius: 50%;
+        border: none;
+
+        background: white;
+        color: black;
 
-            font-size: 30px;
-            font-weight: bold;
-            font-family: Arial, sans-serif;
+        font-size: 30px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-            cursor: pointer;
-            overflow: hidden;
-            white-space: nowrap;
+        cursor: pointer;
+        overflow: hidden;
+        white-space: nowrap;
 
-            transition:
-                width 0.25s ease,
-                transform 0.2s ease,
-                background 0.2s ease,
-                border-radius 0.25s ease;
-        }
+        transition:
+            width 0.25s ease,
+            transform 0.2s ease,
+            background 0.2s ease,
+            border-radius 0.25s ease;
+    }
 
-        .game-button:hover {
-            background: #ddd;
-            transform: scale(1.08);
-            border-radius: 45px;
-        }
-
-        .game-button .game-letter {
-            display: block;
-        }
-
-        .game-button .game-name {
-            display: none;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .game-button:hover .game-letter {
-            display: none;
-        }
+    .game-button:hover {
+        background: #ddd;
+        transform: scale(1.08);
+        border-radius: 45px;
+    }
+
+    .game-button .game-letter {
+        display: block;
+    }
+
+    .game-button .game-name {
+        display: none;
+        font-size: 18px;
+        font-weight: bold;
+    }
 
-        .game-button:hover .game-name {
-            display: block;
-        }
+    .game-button:hover .game-letter {
+        display: none;
+    }
+
+    .game-button:hover .game-name {
+        display: block;
+    }
 
-        /* =========================
-           BUTTON WIDTHS
-        ========================= */
+    /* =========================
+       BUTTON WIDTHS
+    ========================= */
 
-        .eaglercraft-15-button:hover {
-            width: 180px;
-        }
+    .eaglercraft-15-button:hover {
+        width: 180px;
+    }
 
-        .eaglercraft-18-button:hover {
-            width: 180px;
-        }
+    .eaglercraft-18-button:hover {
+        width: 180px;
+    }
 
-        .eaglercraft-19-button:hover {
-            width: 180px;
-        }
+    .eaglercraft-19-button:hover {
+        width: 180px;
+    }
 
-        .eaglercraft-112-button:hover {
-            width: 180px;
-        }
+    .eaglercraft-112-button:hover {
+        width: 180px;
+    }
 
-        .eaglercraft-112-test-button:hover {
-            width: 190px;
-        }
+    .eaglercraft-112-test-button:hover {
+        width: 190px;
+    }
 
-        .eaglermod-button:hover {
-            width: 180px;
-        }
+    .eaglermod-button:hover {
+        width: 180px;
+    }
 
-        .aeroclient-button:hover {
-            width: 170px;
-        }
+    .aeroclient-button:hover {
+        width: 170px;
+    }
 
-        .resent-button:hover {
-            width: 140px;
-        }
+    .resent-button:hover {
+        width: 140px;
+    }
 
-        .btd5-button:hover {
-            width: 160px;
-        }
+    .btd5-button:hover {
+        width: 160px;
+    }
 
-        .terraria-button:hover {
-            width: 130px;
-        }
+    .terraria-button:hover {
+        width: 130px;
+    }
 
-        .nzp-button:hover {
-            width: 180px;
-        }
+    .nzp-button:hover {
+        width: 180px;
+    }
 
-        .webretro-button:hover {
-            width: 180px;
-        }
+    .webretro-button:hover {
+        width: 180px;
+    }
 
-        /* =========================
-           BACK BUTTON
-        ========================= */
+    .test-button:hover {
+        width: 120px;
+    }
 
-        .back-button {
-            position: fixed;
+    /* =========================
+       BACK BUTTON
+    ========================= */
 
-            bottom: 20px;
-            left: 20px;
+    .back-button {
+        position: fixed;
 
-            width: 65px;
-            height: 65px;
+        bottom: 20px;
+        left: 20px;
 
-            padding: 0;
-            margin: 0;
+        width: 65px;
+        height: 65px;
 
-            border-radius: 50%;
-            border: none;
+        padding: 0;
+        margin: 0;
 
-            background: white;
-            color: black;
+        border-radius: 50%;
+        border: none;
 
-            font-size: 28px;
-            font-weight: bold;
-            font-family: Arial, sans-serif;
+        background: white;
+        color: black;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        font-size: 28px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
 
-            cursor: pointer;
-            overflow: hidden;
-            white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-            transition:
-                width 0.25s ease,
-                transform 0.2s ease,
-                background 0.2s ease,
-                border-radius 0.25s ease;
+        cursor: pointer;
+        overflow: hidden;
+        white-space: nowrap;
 
-            z-index: 10;
-        }
+        transition:
+            width 0.25s ease,
+            transform 0.2s ease,
+            background 0.2s ease,
+            border-radius 0.25s ease;
 
-        .back-button:hover {
-            width: 115px;
+        z-index: 10;
+    }
 
-            background: #ddd;
+    .back-button:hover {
+        width: 115px;
 
-            transform: scale(1.08);
+        background: #ddd;
 
-            border-radius: 35px;
-        }
+        transform: scale(1.08);
 
-        .back-button .back-letter {
-            display: block;
-        }
+        border-radius: 35px;
+    }
 
-        .back-button .back-text {
-            display: none;
-            font-size: 18px;
-        }
+    .back-button .back-letter {
+        display: block;
+    }
 
-        .back-button:hover .back-letter {
-            display: none;
-        }
+    .back-button .back-text {
+        display: none;
+        font-size: 18px;
+    }
 
-        .back-button:hover .back-text {
-            display: block;
-        }
+    .back-button:hover .back-letter {
+        display: none;
+    }
 
-        /* =========================
-           QUICK SETTINGS
-        ========================= */
+    .back-button:hover .back-text {
+        display: block;
+    }
 
-        .quick-settings {
-            display: none;
+    /* =========================
+       QUICK SETTINGS
+    ========================= */
 
-            position: fixed;
-            inset: 0;
+    .quick-settings {
+        display: none;
 
-            background: rgba(0, 0, 0, 0.45);
+        position: fixed;
+        inset: 0;
 
-            justify-content: center;
-            align-items: center;
+        background: rgba(0, 0, 0, 0.45);
 
-            z-index: 9999;
-        }
+        justify-content: center;
+        align-items: center;
 
-        .quick-settings.show {
-            display: flex;
-        }
+        z-index: 9999;
+    }
 
-        .quick-settings-box {
-            width: 360px;
+    .quick-settings.show {
+        display: flex;
+    }
 
-            background: white;
-            color: black;
+    .quick-settings-box {
+        width: 360px;
 
-            border-radius: 6px;
-            padding: 25px;
+        background: white;
+        color: black;
 
-            box-shadow:
-                0 15px 50px rgba(0, 0, 0, 0.65);
+        border-radius: 6px;
+        padding: 25px;
 
-            animation:
-                clickguiOpen 0.2s ease-out;
-        }
+        box-shadow:
+            0 15px 50px rgba(0, 0, 0, 0.65);
 
-        .quick-settings-box h2 {
-            margin: 0 0 22px 0;
+        animation:
+            clickguiOpen 0.2s ease-out;
+    }
 
-            font-size: 25px;
-            font-weight: bold;
+    .quick-settings-box h2 {
+        margin: 0 0 22px 0;
 
-            color: black;
-        }
+        font-size: 25px;
+        font-weight: bold;
 
-        .quick-setting {
-            background: #f2f2f2;
+        color: black;
+    }
 
-            border: 1px solid #ddd;
-            border-radius: 5px;
+    .quick-setting {
+        background: #f2f2f2;
 
-            padding: 15px;
-            margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        padding: 15px;
+        margin-bottom: 10px;
 
-            color: black;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-            transition:
-                background 0.15s ease,
-                transform 0.15s ease;
-        }
+        color: black;
 
-        .quick-setting:hover {
-            background: #e7e7e7;
-            transform: translateX(3px);
-        }
+        transition:
+            background 0.15s ease,
+            transform 0.15s ease;
+    }
 
-        .quick-setting span {
-            font-size: 16px;
-            font-weight: bold;
-        }
+    .quick-setting:hover {
+        background: #e7e7e7;
+        transform: translateX(3px);
+    }
 
-        /* =========================
-           SETTINGS BUTTONS
-        ========================= */
+    .quick-setting span {
+        font-size: 16px;
+        font-weight: bold;
+    }
 
-        .settings-button {
-            width: 105px;
+    /* =========================
+       SETTINGS BUTTONS
+    ========================= */
 
-            padding: 9px 12px;
+    .settings-button {
+        width: 105px;
 
-            border: none;
-            border-radius: 5px;
+        padding: 9px 12px;
 
-            background: #111;
-            color: white;
+        border: none;
+        border-radius: 5px;
 
-            font-size: 14px;
-            font-weight: bold;
-            font-family: Arial, sans-serif;
+        background: #111;
+        color: white;
 
-            cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
 
-            transition:
-                background 0.15s ease,
-                transform 0.15s ease;
-        }
+        cursor: pointer;
 
-        .settings-button:hover {
-            background: #333;
-            transform: translateX(3px);
-        }
+        transition:
+            background 0.15s ease,
+            transform 0.15s ease;
+    }
 
-        /* Hidden file picker */
+    .settings-button:hover {
+        background: #333;
+        transform: translateX(3px);
+    }
 
-        #logoFileInput {
-            display: none;
-        }
+    /* Hidden file picker */
 
-        /* =========================
-           MUSIC BUTTON
-        ========================= */
+    #logoFileInput {
+        display: none;
+    }
 
-        .music-open-button {
-            width: 105px;
+    /* =========================
+       MUSIC BUTTON
+    ========================= */
 
-            padding: 9px 12px;
+    .music-open-button {
+        width: 105px;
 
-            border: none;
-            border-radius: 5px;
+        padding: 9px 12px;
 
-            background: #111;
-            color: white;
+        border: none;
+        border-radius: 5px;
 
-            font-size: 14px;
-            font-weight: bold;
-            font-family: Arial, sans-serif;
+        background: #111;
+        color: white;
 
-            cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
 
-            transition:
-                background 0.15s ease,
-                transform 0.15s ease;
-        }
+        cursor: pointer;
 
-        .music-open-button:hover {
-            background: #333;
-            transform: translateX(3px);
-        }
+        transition:
+            background 0.15s ease,
+            transform 0.15s ease;
+    }
 
-        /* =========================
-           SWITCH
-        ========================= */
+    .music-open-button:hover {
+        background: #333;
+        transform: translateX(3px);
+    }
 
-        .switch {
-            position: relative;
+    /* =========================
+       SWITCH
+    ========================= */
 
-            width: 48px;
-            height: 25px;
-        }
+    .switch {
+        position: relative;
 
-        .switch input {
+        width: 48px;
+        height: 25px;
+    }
+
+    .switch input {
+        opacity: 0;
+
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        inset: 0;
+
+        background: #cfcfcf;
+
+        border-radius: 20px;
+
+        cursor: pointer;
+
+        transition: 0.2s;
+    }
+
+    .slider:before {
+        content: "";
+
+        position: absolute;
+
+        width: 19px;
+        height: 19px;
+
+        left: 3px;
+        bottom: 3px;
+
+        background: white;
+
+        border-radius: 50%;
+
+        box-shadow:
+            0 1px 4px rgba(0, 0, 0, 0.25);
+
+        transition: 0.2s;
+    }
+
+    input:checked + .slider {
+        background: #111;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(23px);
+    }
+
+    /* =========================
+       HINT
+    ========================= */
+
+    .hint {
+        margin: 18px 0 0 0;
+
+        color: #777;
+
+        font-size: 13px;
+
+        text-align: center;
+    }
+
+    /* =========================
+       MUSIC POPUP
+    ========================= */
+
+    .music-popup {
+        display: none;
+
+        position: fixed;
+        inset: 0;
+
+        background: rgba(0, 0, 0, 0.55);
+
+        justify-content: center;
+        align-items: center;
+
+        z-index: 10000;
+    }
+
+    .music-popup.show {
+        display: flex;
+    }
+
+    .music-popup-box {
+        position: relative;
+
+        width: min(900px, 90vw);
+        height: min(650px, 85vh);
+
+        background: white;
+
+        border-radius: 8px;
+
+        overflow: hidden;
+
+        box-shadow:
+            0 20px 70px rgba(0, 0, 0, 0.8);
+
+        animation:
+            clickguiOpen 0.2s ease-out;
+    }
+
+    .music-popup-close {
+        position: absolute;
+
+        top: 10px;
+        right: 10px;
+
+        width: 38px;
+        height: 38px;
+
+        border: none;
+        border-radius: 50%;
+
+        background: white;
+        color: black;
+
+        font-size: 25px;
+        font-weight: bold;
+
+        cursor: pointer;
+
+        z-index: 2;
+
+        box-shadow:
+            0 2px 10px rgba(0, 0, 0, 0.25);
+
+        transition:
+            background 0.15s ease,
+            transform 0.15s ease;
+    }
+
+    .music-popup-close:hover {
+        background: #ddd;
+        transform: scale(1.08);
+    }
+
+    .music-popup iframe {
+        width: 100%;
+        height: 100%;
+
+        border: none;
+
+        display: block;
+    }
+
+    /* =========================
+       ANIMATION
+    ========================= */
+
+    @keyframes clickguiOpen {
+
+        from {
             opacity: 0;
-
-            width: 0;
-            height: 0;
+            transform: scale(0.92);
         }
 
-        .slider {
-            position: absolute;
-            inset: 0;
-
-            background: #cfcfcf;
-
-            border-radius: 20px;
-
-            cursor: pointer;
-
-            transition: 0.2s;
+        to {
+            opacity: 1;
+            transform: scale(1);
         }
 
-        .slider:before {
-            content: "";
+    }
 
-            position: absolute;
-
-            width: 19px;
-            height: 19px;
-
-            left: 3px;
-            bottom: 3px;
-
-            background: white;
-
-            border-radius: 50%;
-
-            box-shadow:
-                0 1px 4px rgba(0, 0, 0, 0.25);
-
-            transition: 0.2s;
-        }
-
-        input:checked + .slider {
-            background: #111;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(23px);
-        }
-
-        /* =========================
-           HINT
-        ========================= */
-
-        .hint {
-            margin: 18px 0 0 0;
-
-            color: #777;
-
-            font-size: 13px;
-
-            text-align: center;
-        }
-
-        /* =========================
-           MUSIC POPUP
-        ========================= */
-
-        .music-popup {
-            display: none;
-
-            position: fixed;
-            inset: 0;
-
-            background: rgba(0, 0, 0, 0.55);
-
-            justify-content: center;
-            align-items: center;
-
-            z-index: 10000;
-        }
-
-        .music-popup.show {
-            display: flex;
-        }
-
-        .music-popup-box {
-            position: relative;
-
-            width: min(900px, 90vw);
-            height: min(650px, 85vh);
-
-            background: white;
-
-            border-radius: 8px;
-
-            overflow: hidden;
-
-            box-shadow:
-                0 20px 70px rgba(0, 0, 0, 0.8);
-
-            animation:
-                clickguiOpen 0.2s ease-out;
-        }
-
-        .music-popup-close {
-            position: absolute;
-
-            top: 10px;
-            right: 10px;
-
-            width: 38px;
-            height: 38px;
-
-            border: none;
-            border-radius: 50%;
-
-            background: white;
-            color: black;
-
-            font-size: 25px;
-            font-weight: bold;
-
-            cursor: pointer;
-
-            z-index: 2;
-
-            box-shadow:
-                0 2px 10px rgba(0, 0, 0, 0.25);
-
-            transition:
-                background 0.15s ease,
-                transform 0.15s ease;
-        }
-
-        .music-popup-close:hover {
-            background: #ddd;
-            transform: scale(1.08);
-        }
-
-        .music-popup iframe {
-            width: 100%;
-            height: 100%;
-
-            border: none;
-
-            display: block;
-        }
-
-        /* =========================
-           ANIMATION
-        ========================= */
-
-        @keyframes clickguiOpen {
-
-            from {
-                opacity: 0;
-                transform: scale(0.92);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-        }
-
-    </style>
+</style>
 
 </head>
 
@@ -586,246 +591,261 @@
     class="background">
 </div>
 
-
 <h1>Games</h1>
-
 
 <!-- =========================
      GAME BUTTONS
 ========================= -->
 
 <div class="game-buttons">
+<!-- Eaglercraft 1.5.2 -->
 
-    <!-- Eaglercraft 1.5.2 -->
+<button
+    class="game-button eaglercraft-15-button"
+    onclick="launchEaglercraft(
+        'assets/jello/1.5.2.html'
+    )"
+>
+    <span class="game-letter">
+        1.5
+    </span>
 
-    <button
-        class="game-button eaglercraft-15-button"
-        onclick="launchEaglercraft(
-            'assets/jello/1.5.2.html'
-        )"
-    >
-        <span class="game-letter">
-            1.5
-        </span>
-
-        <span class="game-name">
-            1.5 Eaglercraft
-        </span>
-    </button>
-
-
-    <!-- Eaglercraft 1.8.8 -->
-
-    <button
-        class="game-button eaglercraft-18-button"
-        onclick="launchEaglercraft(
-            'assets/jello/1.8.html'
-        )"
-    >
-        <span class="game-letter">
-            1.8
-        </span>
-
-        <span class="game-name">
-            1.8 Eaglercraft
-        </span>
-    </button>
+    <span class="game-name">
+        1.5 Eaglercraft
+    </span>
+</button>
 
 
-    <!-- Eaglercraft 1.9 -->
+<!-- Eaglercraft 1.8.8 -->
 
-    <button
-        class="game-button eaglercraft-19-button"
-        onclick="launchEaglercraft(
-            'assets/jello/1.9.html'
-        )"
-    >
-        <span class="game-letter">
-            1.9
-        </span>
+<button
+    class="game-button eaglercraft-18-button"
+    onclick="launchEaglercraft(
+        'assets/jello/1.8.html'
+    )"
+>
+    <span class="game-letter">
+        1.8
+    </span>
 
-        <span class="game-name">
-            1.9 Eaglercraft
-        </span>
-    </button>
-
-
-    <!-- Eaglercraft 1.12.2 -->
-
-    <button
-        class="game-button eaglercraft-112-button"
-        onclick="launchEaglercraft(
-            'assets/jello/1.12.2.html'
-        )"
-    >
-        <span class="game-letter">
-            1.12
-        </span>
-
-        <span class="game-name">
-            1.12.2 Eaglercraft
-        </span>
-    </button>
+    <span class="game-name">
+        1.8 Eaglercraft
+    </span>
+</button>
 
 
-    <!-- Eaglercraft 1.12.2 Test -->
+<!-- Eaglercraft 1.9 -->
 
-    <button
-        class="game-button eaglercraft-112-test-button"
-        onclick="launchEaglercraft(
-            'assets/jello/1.12.2js.html'
-        )"
-    >
-        <span class="game-letter">
-            1.12T
-        </span>
+<button
+    class="game-button eaglercraft-19-button"
+    onclick="launchEaglercraft(
+        'assets/jello/1.9.html'
+    )"
+>
+    <span class="game-letter">
+        1.9
+    </span>
 
-        <span class="game-name">
-            1.12.2 Test
-        </span>
-    </button>
-
-
-    <!-- EaglerMod Shit -->
-
-    <button
-        class="game-button eaglermod-button"
-        onclick="location.href =
-            'assets/jello/eaglermod.html'"
-    >
-        <span class="game-letter">
-            EM
-        </span>
-
-        <span class="game-name">
-            EaglerMod Shit
-        </span>
-    </button>
+    <span class="game-name">
+        1.9 Eaglercraft
+    </span>
+</button>
 
 
-    <!-- AeroClient -->
+<!-- Eaglercraft 1.12.2 -->
 
-    <button
-        class="game-button aeroclient-button"
-        onclick="launchEaglercraft(
-            'assets/jello/AeroClient.html'
-        )"
-    >
-        <span class="game-letter">
-            A
-        </span>
+<button
+    class="game-button eaglercraft-112-button"
+    onclick="launchEaglercraft(
+        'assets/jello/1.12.2.html'
+    )"
+>
+    <span class="game-letter">
+        1.12
+    </span>
 
-        <span class="game-name">
-            AeroClient
-        </span>
-    </button>
-
-
-    <!-- Resent -->
-
-    <button
-        class="game-button resent-button"
-        onclick="launchEaglercraft(
-            'assets/jello/resent.html'
-        )"
-    >
-        <span class="game-letter">
-            R
-        </span>
-
-        <span class="game-name">
-            Resent
-        </span>
-    </button>
+    <span class="game-name">
+        1.12.2 Eaglercraft
+    </span>
+</button>
 
 
-    <!-- Bloons TD 5 -->
+<!-- Eaglercraft 1.12.2 Test -->
 
-    <button
-        class="game-button btd5-button"
-        onclick="location.href =
-            'assets/jello/btd5.html'"
-    >
-        <span class="game-letter">
-            B
-        </span>
+<button
+    class="game-button eaglercraft-112-test-button"
+    onclick="launchEaglercraft(
+        'assets/jello/1.12.2js.html'
+    )"
+>
+    <span class="game-letter">
+        1.12T
+    </span>
 
-        <span class="game-name">
-            Bloons TD 5
-        </span>
-    </button>
-
-
-    <!-- Terraria -->
-
-    <button
-        class="game-button terraria-button"
-        onclick="location.href =
-            'assets/jello/terraria.html'"
-    >
-        <span class="game-letter">
-            T
-        </span>
-
-        <span class="game-name">
-            Terraria
-        </span>
-    </button>
+    <span class="game-name">
+        1.12.2 Test
+    </span>
+</button>
 
 
-    <!-- NZP -->
+<!-- EaglerMod Shit -->
 
-    <button
-        class="game-button nzp-button"
-        onclick="location.href =
-            'assets/jello/nzp/index.html'"
-    >
-        <span class="game-letter">
-            N
-        </span>
+<button
+    class="game-button eaglermod-button"
+    onclick="location.href =
+        'assets/jello/eaglermod.html'"
+>
+    <span class="game-letter">
+        EM
+    </span>
 
-        <span class="game-name">
-            NZP
-        </span>
-    </button>
+    <span class="game-name">
+        EaglerMod Shit
+    </span>
+</button>
 
 
-    <!-- WebRetro -->
+<!-- AeroClient -->
 
-    <button
-        class="game-button webretro-button"
-        onclick="location.href =
-            'assets/jello/webretro/index.html'"
-    >
-        <span class="game-letter">
-            W
-        </span>
+<button
+    class="game-button aeroclient-button"
+    onclick="launchEaglercraft(
+        'assets/jello/AeroClient.html'
+    )"
+>
+    <span class="game-letter">
+        A
+    </span>
 
-        <span class="game-name">
-            WebRetro
-        </span>
-    </button>
+    <span class="game-name">
+        AeroClient
+    </span>
+</button>
+
+
+<!-- Resent -->
+
+<button
+    class="game-button resent-button"
+    onclick="launchEaglercraft(
+        'assets/jello/resent.html'
+    )"
+>
+    <span class="game-letter">
+        R
+    </span>
+
+    <span class="game-name">
+        Resent
+    </span>
+</button>
+
+
+<!-- Bloons TD 5 -->
+
+<button
+    class="game-button btd5-button"
+    onclick="location.href =
+        'assets/jello/btd5.html'"
+>
+    <span class="game-letter">
+        B
+    </span>
+
+    <span class="game-name">
+        Bloons TD 5
+    </span>
+</button>
+
+
+<!-- Terraria -->
+
+<button
+    class="game-button terraria-button"
+    onclick="location.href =
+        'assets/jello/terraria.html'"
+>
+    <span class="game-letter">
+        T
+    </span>
+
+    <span class="game-name">
+        Terraria
+    </span>
+</button>
+
+
+<!-- NZP -->
+
+<button
+    class="game-button nzp-button"
+    onclick="location.href =
+        'assets/jello/nzp/index.html'"
+>
+    <span class="game-letter">
+        N
+    </span>
+
+    <span class="game-name">
+        NZP
+    </span>
+</button>
+
+
+<!-- WebRetro -->
+
+<button
+    class="game-button webretro-button"
+    onclick="location.href =
+        'assets/jello/webretro/index.html'"
+>
+    <span class="game-letter">
+        W
+    </span>
+
+    <span class="game-name">
+        WebRetro
+    </span>
+</button>
+
+
+<!-- Test -->
+
+<button
+    class="game-button test-button"
+    onclick="location.href =
+        'test.html'"
+>
+    <span class="game-letter">
+        T
+    </span>
+
+    <span class="game-name">
+        Test
+    </span>
+</button>
 
 </div>
-
 
 <!-- =========================
      BACK BUTTON
 ========================= -->
 
 <button
-    class="back-button"
-    onclick="location.href='index.html'"
+class="back-button"
+onclick="location.href='index.html'"
+
 >
-    <span class="back-letter">
-        ←
-    </span>
+<span class="back-letter">
 
-    <span class="back-text">
-        Back
-    </span>
+    ←
+</span>
+
+<span class="back-text">
+    Back
+</span>
+
 </button>
-
 
 <!-- =========================
      QUICK SETTINGS
@@ -836,154 +856,153 @@
     class="quick-settings"
 >
 
-    <div class="quick-settings-box">
+<div class="quick-settings-box">
 
-        <h2>
-            Settings
-        </h2>
-
-
-        <!-- No Tab Close -->
-
-        <div class="quick-setting">
-
-            <span>
-                No Tab Close
-            </span>
-
-            <label class="switch">
-
-                <input
-                    type="checkbox"
-                    id="quickNoTabClose"
-                >
-
-                <span class="slider"></span>
-
-            </label>
-
-        </div>
+    <h2>
+        Settings
+    </h2>
 
 
-        <!-- Full Screen -->
+    <!-- No Tab Close -->
 
-        <div class="quick-setting">
+    <div class="quick-setting">
 
-            <span>
-                Full Screen
-            </span>
+        <span>
+            No Tab Close
+        </span>
 
-            <label class="switch">
+        <label class="switch">
 
-                <input
-                    type="checkbox"
-                    id="quickFullscreen"
-                >
-
-                <span class="slider"></span>
-
-            </label>
-
-        </div>
-
-
-        <!-- Mouse Background -->
-
-        <div class="quick-setting">
-
-            <span>
-                Mouse Background Movement
-            </span>
-
-            <label class="switch">
-
-                <input
-                    type="checkbox"
-                    id="quickMouseBackground"
-                >
-
-                <span class="slider"></span>
-
-            </label>
-
-        </div>
-
-
-        <!-- Jello Music -->
-
-        <div class="quick-setting">
-
-            <span>
-                Jello Music
-            </span>
-
-            <button
-                class="music-open-button"
-                onclick="openMusicPopup()"
+            <input
+                type="checkbox"
+                id="quickNoTabClose"
             >
-                Open
-            </button>
 
-        </div>
+            <span class="slider"></span>
 
-
-        <!-- =========================
-             CHANGE LOGO
-        ========================= -->
-
-        <div class="quick-setting">
-
-            <span>
-                Change Logo
-            </span>
-
-            <button
-                class="settings-button"
-                onclick="document.getElementById('logoFileInput').click()"
-            >
-                Choose
-            </button>
-
-        </div>
-
-
-        <!-- =========================
-             CHANGE TAB NAME
-        ========================= -->
-
-        <div class="quick-setting">
-
-            <span>
-                Change Tab Name
-            </span>
-
-            <button
-                class="settings-button"
-                onclick="changeTabName()"
-            >
-                Change
-            </button>
-
-        </div>
-
-
-        <p class="hint">
-            Press P to close
-        </p>
+        </label>
 
     </div>
 
+
+    <!-- Full Screen -->
+
+    <div class="quick-setting">
+
+        <span>
+            Full Screen
+        </span>
+
+        <label class="switch">
+
+            <input
+                type="checkbox"
+                id="quickFullscreen"
+            >
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+
+    <!-- Mouse Background -->
+
+    <div class="quick-setting">
+
+        <span>
+            Mouse Background Movement
+        </span>
+
+        <label class="switch">
+
+            <input
+                type="checkbox"
+                id="quickMouseBackground"
+            >
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+
+    <!-- Jello Music -->
+
+    <div class="quick-setting">
+
+        <span>
+            Jello Music
+        </span>
+
+        <button
+            class="music-open-button"
+            onclick="openMusicPopup()"
+        >
+            Open
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         CHANGE LOGO
+    ========================= -->
+
+    <div class="quick-setting">
+
+        <span>
+            Change Logo
+        </span>
+
+        <button
+            class="settings-button"
+            onclick="document.getElementById('logoFileInput').click()"
+        >
+            Choose
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         CHANGE TAB NAME
+    ========================= -->
+
+    <div class="quick-setting">
+
+        <span>
+            Change Tab Name
+        </span>
+
+        <button
+            class="settings-button"
+            onclick="changeTabName()"
+        >
+            Change
+        </button>
+
+    </div>
+
+
+    <p class="hint">
+        Press P to close
+    </p>
+
 </div>
 
+</div>
 
 <!-- Hidden logo file picker -->
 
 <input
-    type="file"
-    id="logoFileInput"
-    accept="image/*"
->
+type="file"
+id="logoFileInput"
+accept="image/*"
 
+>
 
 <!-- =========================
      MUSIC POPUP
@@ -994,25 +1013,23 @@
     class="music-popup"
 >
 
-    <div class="music-popup-box">
+<div class="music-popup-box">
 
-        <button
-            class="music-popup-close"
-            onclick="closeMusicPopup()"
-        >
-            ×
-        </button>
+    <button
+        class="music-popup-close"
+        onclick="closeMusicPopup()"
+    >
+        ×
+    </button>
 
-        <iframe
-            src="about:blank"
-            id="musicFrame"
-            title="Jello Music"
-        ></iframe>
-
-    </div>
+    <iframe
+        src="about:blank"
+        id="musicFrame"
+        title="Jello Music"
+    ></iframe>
 
 </div>
-
+</div>
 
 <script>
 
@@ -1438,442 +1455,439 @@
 
                 </style>
 
-            </head>
+        </head>
 
-            <body>
+        <body>
 
-                <iframe
-                    src="${escapeHTML(
-                        gameURL
-                    )}"
-                    allowfullscreen>
-                </iframe>
+            <iframe
+                src="${escapeHTML(
+                    gameURL
+                )}"
+                allowfullscreen>
+            </iframe>
 
-            </body>
+        </body>
 
-            </html>
+        </html>
 
-        `);
-
-
-        gameWindow.document.close();
-
-    }
+    `);
 
 
-    /* =========================
-       HTML ESCAPE
-       ========================= */
+    gameWindow.document.close();
 
-    function escapeHTML(value) {
-
-        return String(value)
-
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-
-            .replace(
-                /</g,
-                "&lt;"
-            )
-
-            .replace(
-                />/g,
-                "&gt;"
-            )
-
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-
-            .replace(
-                /'/g,
-                "&#039;"
-            );
-
-    }
+}
 
 
-    /* =========================
-       QUICK SETTINGS
-       ========================= */
+/* =========================
+   HTML ESCAPE
+   ========================= */
 
-    const quickSettings =
-        document.getElementById(
-            "quickSettings"
+function escapeHTML(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
         );
 
-
-    const quickNoTabClose =
-        document.getElementById(
-            "quickNoTabClose"
-        );
+}
 
 
-    const quickFullscreen =
-        document.getElementById(
-            "quickFullscreen"
-        );
+/* =========================
+   QUICK SETTINGS
+   ========================= */
 
-
-    const quickMouseBackground =
-        document.getElementById(
-            "quickMouseBackground"
-        );
-
-
-    const background =
-        document.getElementById(
-            "background"
-        );
-
-
-    /* =========================
-       NO TAB CLOSE
-       ========================= */
-
-    function enableNoTabClose() {
-
-        window.onbeforeunload =
-            function(event) {
-
-                event.preventDefault();
-
-                event.returnValue = "";
-
-                return "";
-
-            };
-
-    }
-
-
-    function disableNoTabClose() {
-
-        window.onbeforeunload =
-            null;
-
-    }
-
-
-    if (
-        localStorage.getItem(
-            "noTabClose"
-        ) === "true"
-    ) {
-
-        quickNoTabClose.checked =
-            true;
-
-        enableNoTabClose();
-
-    }
-
-
-    quickNoTabClose.addEventListener(
-        "change",
-        function() {
-
-            if (this.checked) {
-
-                localStorage.setItem(
-                    "noTabClose",
-                    "true"
-                );
-
-                enableNoTabClose();
-
-            } else {
-
-                localStorage.setItem(
-                    "noTabClose",
-                    "false"
-                );
-
-                disableNoTabClose();
-
-            }
-
-        }
+const quickSettings =
+    document.getElementById(
+        "quickSettings"
     );
 
 
-    /* =========================
-       FULL SCREEN
-       ========================= */
-
-    quickFullscreen.addEventListener(
-        "change",
-        function() {
-
-            if (this.checked) {
-
-                if (
-                    document
-                        .documentElement
-                        .requestFullscreen
-                ) {
-
-                    document
-                        .documentElement
-                        .requestFullscreen();
-
-                }
-
-            } else {
-
-                if (
-                    document.fullscreenElement
-                ) {
-
-                    document.exitFullscreen();
-
-                }
-
-            }
-
-        }
+const quickNoTabClose =
+    document.getElementById(
+        "quickNoTabClose"
     );
 
 
-    document.addEventListener(
-        "fullscreenchange",
-        function() {
-
-            quickFullscreen.checked =
-                !!document.fullscreenElement;
-
-        }
+const quickFullscreen =
+    document.getElementById(
+        "quickFullscreen"
     );
 
 
-    /* =========================
-       MOUSE BACKGROUND
-       ========================= */
-
-    let mouseBackgroundEnabled =
-        localStorage.getItem(
-            "mouseBackground"
-        ) !== "false";
+const quickMouseBackground =
+    document.getElementById(
+        "quickMouseBackground"
+    );
 
 
-    quickMouseBackground.checked =
-        mouseBackgroundEnabled;
+const background =
+    document.getElementById(
+        "background"
+    );
 
 
-    document.addEventListener(
-        "mousemove",
+/* =========================
+   NO TAB CLOSE
+   ========================= */
+
+function enableNoTabClose() {
+
+    window.onbeforeunload =
         function(event) {
-
-            if (
-                !mouseBackgroundEnabled
-            ) {
-
-                return;
-
-            }
-
-
-            const x =
-                (
-                    event.clientX /
-                    window.innerWidth
-                ) - 0.5;
-
-
-            const y =
-                (
-                    event.clientY /
-                    window.innerHeight
-                ) - 0.5;
-
-
-            const moveX =
-                x * 35;
-
-
-            const moveY =
-                y * 35;
-
-
-            background.style.transform =
-                `translate(
-                    ${moveX}px,
-                    ${moveY}px
-                )`;
-
-        }
-    );
-
-
-    quickMouseBackground.addEventListener(
-        "change",
-        function() {
-
-            mouseBackgroundEnabled =
-                this.checked;
-
-
-            localStorage.setItem(
-                "mouseBackground",
-                mouseBackgroundEnabled
-            );
-
-
-            if (
-                !mouseBackgroundEnabled
-            ) {
-
-                background.style.transform =
-                    "translate(0px, 0px)";
-
-            }
-
-        }
-    );
-
-
-    /* =========================
-       MUSIC POPUP
-       ========================= */
-
-    const musicPopup =
-        document.getElementById(
-            "musicPopup"
-        );
-
-
-    const musicFrame =
-        document.getElementById(
-            "musicFrame"
-        );
-
-
-    function openMusicPopup() {
-
-        quickSettings.classList.remove(
-            "show"
-        );
-
-
-        musicFrame.src =
-            "music.html";
-
-
-        musicPopup.classList.add(
-            "show"
-        );
-
-    }
-
-
-    function closeMusicPopup() {
-
-        musicPopup.classList.remove(
-            "show"
-        );
-
-
-        musicFrame.src =
-            "about:blank";
-
-    }
-
-
-    musicPopup.addEventListener(
-        "click",
-        function(event) {
-
-            if (
-                event.target ===
-                musicPopup
-            ) {
-
-                closeMusicPopup();
-
-            }
-
-        }
-    );
-
-
-    /* =========================
-       P KEY
-       ========================= */
-
-    window.addEventListener(
-        "keydown",
-        function(event) {
-
-            if (
-                event.code !==
-                "KeyP"
-            ) {
-
-                return;
-
-            }
-
-
-            if (event.repeat) {
-
-                return;
-
-            }
-
 
             event.preventDefault();
 
+            event.returnValue = "";
+
+            return "";
+
+        };
+
+}
+
+
+function disableNoTabClose() {
+
+    window.onbeforeunload =
+        null;
+
+}
+
+
+if (
+    localStorage.getItem(
+        "noTabClose"
+    ) === "true"
+) {
+
+    quickNoTabClose.checked =
+        true;
+
+    enableNoTabClose();
+
+}
+
+
+quickNoTabClose.addEventListener(
+    "change",
+    function() {
+
+        if (this.checked) {
+
+            localStorage.setItem(
+                "noTabClose",
+                "true"
+            );
+
+            enableNoTabClose();
+
+        } else {
+
+            localStorage.setItem(
+                "noTabClose",
+                "false"
+            );
+
+            disableNoTabClose();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   FULL SCREEN
+   ========================= */
+
+quickFullscreen.addEventListener(
+    "change",
+    function() {
+
+        if (this.checked) {
 
             if (
-                musicPopup.classList.contains(
-                    "show"
-                )
+                document
+                    .documentElement
+                    .requestFullscreen
             ) {
 
-                closeMusicPopup();
-
-                return;
+                document
+                    .documentElement
+                    .requestFullscreen();
 
             }
 
+        } else {
 
-            quickSettings.classList.toggle(
+            if (
+                document.fullscreenElement
+            ) {
+
+                document.exitFullscreen();
+
+            }
+
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "fullscreenchange",
+    function() {
+
+        quickFullscreen.checked =
+            !!document.fullscreenElement;
+
+    }
+);
+
+
+/* =========================
+   MOUSE BACKGROUND
+   ========================= */
+
+let mouseBackgroundEnabled =
+    localStorage.getItem(
+        "mouseBackground"
+    ) !== "false";
+
+
+quickMouseBackground.checked =
+    mouseBackgroundEnabled;
+
+
+document.addEventListener(
+    "mousemove",
+    function(event) {
+
+        if (
+            !mouseBackgroundEnabled
+        ) {
+
+            return;
+
+        }
+
+
+        const x =
+            (
+                event.clientX /
+                window.innerWidth
+            ) - 0.5;
+
+
+        const y =
+            (
+                event.clientY /
+                window.innerHeight
+            ) - 0.5;
+
+
+        const moveX =
+            x * 35;
+
+
+        const moveY =
+            y * 35;
+
+
+        background.style.transform =
+            `translate(
+                ${moveX}px,
+                ${moveY}px
+            )`;
+
+    }
+);
+
+
+quickMouseBackground.addEventListener(
+    "change",
+    function() {
+
+        mouseBackgroundEnabled =
+            this.checked;
+
+
+        localStorage.setItem(
+            "mouseBackground",
+            mouseBackgroundEnabled
+        );
+
+
+        if (
+            !mouseBackgroundEnabled
+        ) {
+
+            background.style.transform =
+                "translate(0px, 0px)";
+
+        }
+
+    }
+);
+
+
+/* =========================
+   MUSIC POPUP
+   ========================= */
+
+const musicPopup =
+    document.getElementById(
+        "musicPopup"
+    );
+
+
+const musicFrame =
+    document.getElementById(
+        "musicFrame"
+    );
+
+
+function openMusicPopup() {
+
+    quickSettings.classList.remove(
+        "show"
+    );
+
+
+    musicFrame.src =
+        "music.html";
+
+
+    musicPopup.classList.add(
+        "show"
+    );
+
+}
+
+
+function closeMusicPopup() {
+
+    musicPopup.classList.remove(
+        "show"
+    );
+
+
+    musicFrame.src =
+        "about:blank";
+
+}
+
+
+musicPopup.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target ===
+            musicPopup
+        ) {
+
+            closeMusicPopup();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   P KEY
+   ========================= */
+
+window.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.code !==
+            "KeyP"
+        ) {
+
+            return;
+
+        }
+
+
+        if (event.repeat) {
+
+            return;
+
+        }
+
+
+        event.preventDefault();
+
+
+        if (
+            musicPopup.classList.contains(
+                "show"
+            )
+        ) {
+
+            closeMusicPopup();
+
+            return;
+
+        }
+
+
+        quickSettings.classList.toggle(
+            "show"
+        );
+
+    }
+);
+
+
+/* =========================
+   CLICK OUTSIDE SETTINGS
+   ========================= */
+
+quickSettings.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target ===
+            quickSettings
+        ) {
+
+            quickSettings.classList.remove(
                 "show"
             );
 
         }
-    );
 
-
-    /* =========================
-       CLICK OUTSIDE SETTINGS
-       ========================= */
-
-    quickSettings.addEventListener(
-        "click",
-        function(event) {
-
-            if (
-                event.target ===
-                quickSettings
-            ) {
-
-                quickSettings.classList.remove(
-                    "show"
-                );
-
-            }
-
-        }
-    );
-
-
+    }
+);
 </script>
 
 </body>
 </html>
-
